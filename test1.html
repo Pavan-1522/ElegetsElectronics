@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Innovative Concepts | Elegets Electronics</title>
+    <meta name="description" content="Explore innovative project concepts and future-focused ideas from Elegets Electronics, complete with SWOT analysis.">
+    <link rel="icon" href="elegets-logo-cut.png" type="image/png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #0D253F;
+            --primary-light: #2A4A6E;
+            --primary-dark: #071729;
+            --secondary: #01B4E4;
+            --secondary-light: #e0f7fa;
+            --accent: #F4A261;
+            --dark: #121212;
+            --light: #F8F9FA;
+            --light-gray: #f1f3f5;
+            --medium-gray: #dee2e6;
+            --gray: #6c757d;
+            --white: #ffffff;
+            --shadow-sm: 0 4px 6px rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 10px 15px rgba(0, 0, 0, 0.08);
+            --shadow-lg: 0 20px 25px rgba(0, 0, 0, 0.1);
+            --transition: all 0.35s cubic-bezier(0.25, 0.8, 0.25, 1);
+            --border-radius: 12px;
+            --border-radius-lg: 20px;
+            --font-primary: 'Montserrat', sans-serif;
+            --font-secondary: 'Poppins', sans-serif;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        body {
+            font-family: var(--font-secondary);
+            background-color: var(--light);
+            color: var(--dark);
+            overflow-x: hidden;
+            line-height: 1.7;
+        }
+        body.no-scroll { overflow: hidden; }
+
+        .container { width: 100%; max-width: 1300px; margin: 0 auto; padding: 0 30px; }
+        section { padding: 120px 0; }
+        h1, h2, h3, h4 {
+            font-family: var(--font-primary); font-weight: 700;
+            line-height: 1.2; margin-bottom: 1.5rem; color: var(--primary);
+        }
+        p { margin-bottom: 1.5rem; color: var(--gray); font-size: 1.05rem; }
+        a { text-decoration: none; color: inherit; transition: var(--transition); }
+        
+        /* Header */
+        header {
+            position: fixed; top: 0; left: 0; width: 100%;
+            background: rgba(13, 37, 63, 0.9); backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px); z-index: 1000; padding: 20px 0;
+            box-shadow: var(--shadow-sm); transition: var(--transition);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        header.scrolled { padding: 12px 0; box-shadow: var(--shadow-md); }
+        nav { display: flex; justify-content: space-between; align-items: center; }
+        .logo { display: flex; align-items: center; gap: 12px; font-size: 1.6rem; font-weight: 700; color: var(--white); }
+        .nav-logo { width: 45px; height: 45px; transition: var(--transition); }
+        .nav-links { display: flex; gap: 2.5rem; list-style: none; margin: 0; padding: 0; }
+        .nav-links a { 
+            color: rgba(255, 255, 255, 0.9); font-weight: 500; position: relative;
+            transition: var(--transition); font-size: 1.05rem; letter-spacing: 0.5px;
+            font-family: var(--font-primary);
+        }
+        .nav-links a::after { 
+            content: ''; position: absolute; bottom: -8px; left: 50%;
+            transform: translateX(-50%); width: 0; height: 2px;
+            background: var(--secondary); transition: var(--transition); 
+        }
+        .nav-links a:hover::after, .nav-links a.active::after { width: 100%; }
+        .nav-links a:hover, .nav-links a.active { color: var(--white); }
+        .mobile-menu-btn { display: none; }
+        .overlay { display: none; }
+        
+        /* Page Hero Section */
+        .page-hero {
+            height: 60vh; min-height: 500px; margin-top: 85px;
+            background: linear-gradient(135deg, var(--primary-dark), var(--primary));
+            color: var(--white); display: flex; align-items: center; text-align: center; justify-content: center;
+            position: relative; overflow: hidden;
+            clip-path: polygon(0 0, 100% 0, 100% 90%, 0 100%);
+        }
+        .page-hero::before {
+            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: url('https://images.unsplash.com/photo-1593349480503-6e3e3a134b13?auto=format&fit=crop&w=1920&q=80') no-repeat center/cover;
+            opacity: 0.1; z-index: 1;
+        }
+        .page-hero-content { position: relative; z-index: 2; max-width: 800px; }
+        .page-hero h1 { font-size: 3.5rem; color: var(--white); }
+        .page-hero p { font-size: 1.3rem; color: rgba(255, 255, 255, 0.9); }
+        
+        /* Projects Section */
+        .projects-section { background-color: var(--white); }
+        .section-title { text-align: center; margin-bottom: 5rem; }
+        .section-title h2 { font-size: 2.8rem; margin-bottom: 1.5rem; position: relative; display: inline-block; }
+        .section-title h2::after {
+            content: ''; position: absolute; bottom: -15px; left: 50%;
+            transform: translateX(-50%); width: 70px; height: 4px;
+            background: var(--secondary); border-radius: 2px;
+        }
+        .section-title p { max-width: 800px; margin: 0 auto; font-size: 1.1rem; }
+        
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2.5rem;
+        }
+        .project-card {
+            background: var(--white);
+            border-radius: var(--border-radius-lg);
+            box-shadow: var(--shadow-md);
+            transition: var(--transition);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+        .project-card:hover { transform: translateY(-10px); box-shadow: var(--shadow-lg); }
+        .project-image { height: 250px; overflow: hidden; }
+        .project-image img {
+            width: 100%; height: 100%; object-fit: cover;
+            transition: transform 0.4s ease-out;
+        }
+        .project-card:hover .project-image img { transform: scale(1.05); }
+        .project-content { padding: 2rem; flex-grow: 1; display: flex; flex-direction: column; }
+        .project-tags { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 1rem; }
+        .tag {
+            background: var(--secondary-light); color: var(--secondary);
+            padding: 0.3rem 0.8rem; border-radius: 50px;
+            font-size: 0.8rem; font-weight: 600; text-transform: uppercase;
+        }
+        .project-content h3 { font-size: 1.5rem; }
+        .project-content h4 { font-size: 1.1rem; margin-top: 1.5rem; margin-bottom: 0.5rem; color: var(--primary-light); }
+        .project-content p { font-size: 0.95rem; line-height: 1.6; }
+        .project-content p b { color: var(--primary-dark); }
+        .project-content .btn-main { margin-top: 1.5rem; align-self: flex-start; }
+        .btn-main {
+            display: inline-block; background: var(--primary); color: var(--white);
+            padding: 12px 25px; border-radius: 50px; font-weight: 600;
+            font-size: 0.9rem; text-transform: uppercase; letter-spacing: 0.5px;
+        }
+        .btn-main:hover { background: var(--primary-light); transform: translateY(-3px); box-shadow: var(--shadow-md); }
+        
+        /* CTA Section */
+        .cta-section { 
+            padding: 100px 0; background: linear-gradient(135deg, var(--secondary), var(--primary-light));
+            color: var(--white); text-align: center;
+        }
+        .cta-content { max-width: 800px; margin: 0 auto; }
+        .cta-content h2 { font-size: 2.8rem; margin-bottom: 1.5rem; color: var(--white); }
+        .cta-content p { color: rgba(255, 255, 255, 0.85); font-size: 1.2rem; margin-bottom: 2.5rem; }
+        .cta-btn {
+            background: var(--white); color: var(--primary); padding: 15px 40px; border-radius: 50px;
+            font-weight: 600; text-transform: uppercase; letter-spacing: 1px; font-size: 1rem;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.15); transition: var(--transition);
+            border: 2px solid transparent; display: inline-block;
+        }
+        .cta-btn:hover {
+            background: transparent; color: var(--white); border-color: var(--white);
+            transform: translateY(-5px); box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+        
+        /* Footer */
+        footer { background: var(--dark); color: var(--white); padding: 120px 0 40px; position: relative; }
+        footer::before {
+            content: ''; position: absolute; top: 0; left: 0;
+            width: 100%; height: 5px;
+            background: linear-gradient(90deg, var(--secondary), var(--accent));
+        }
+        .footer-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 3rem; margin-bottom: 4rem; }
+        .footer-col h3 { 
+            color: var(--white); margin-bottom: 2rem; font-size: 1.4rem; position: relative; 
+            padding-bottom: 15px; font-weight: 600;
+        }
+        .footer-col h3::after { content: ''; position: absolute; bottom: 0; left: 0; width: 50px; height: 3px; background: var(--secondary); }
+        .footer-links { list-style: none; padding: 0; }
+        .footer-links li { margin-bottom: 1rem; }
+        .footer-links a { color: rgba(255, 255, 255, 0.7); transition: var(--transition); font-size: 1.05rem; }
+        .footer-links a:hover { color: var(--secondary); padding-left: 5px; }
+        .footer-bottom { 
+            border-top: 1px solid rgba(255, 255, 255, 0.1); padding-top: 30px; 
+            text-align: center; color: rgba(255, 255, 255, 0.6); font-size: 0.95rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            section { padding: 80px 0; }
+            .page-hero { min-height: 400px; clip-path: polygon(0 0, 100% 0, 100% 95%, 0 100%); }
+            .page-hero h1 { font-size: 2.5rem; }
+            .section-title h2, .cta-content h2 { font-size: 2.2rem; }
+            
+            .mobile-menu-btn {
+                display: flex; flex-direction: column; justify-content: center; align-items: center;
+                width: 45px; height: 45px; background: none; border: none;
+                color: var(--white); font-size: 1.5rem; cursor: pointer; transition: var(--transition); z-index: 1001;
+            }
+            .mobile-menu-btn span { 
+                display: block; width: 26px; height: 2px; background: var(--white); 
+                margin: 4px 0; transition: var(--transition); transform-origin: center; 
+            }
+            .mobile-menu-btn.active span:nth-child(1) { transform: translateY(6px) rotate(45deg); }
+            .mobile-menu-btn.active span:nth-child(2) { opacity: 0; }
+            .mobile-menu-btn.active span:nth-child(3) { transform: translateY(-6px) rotate(-45deg); }
+            .nav-links {
+                position: fixed; top: 0; left: -100%; width: 85%; max-width: 350px; height: 100vh;
+                background: var(--primary-dark); flex-direction: column; align-items: flex-start;
+                justify-content: flex-start; gap: 1.5rem; padding: 120px 40px;
+                transition: var(--transition); z-index: 1000; box-shadow: 5px 0 25px rgba(0, 0, 0, 0.3);
+            }
+            .nav-links.active { left: 0; }
+            .overlay { 
+                display: block; position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
+                background: rgba(0, 0, 0, 0.7); z-index: 999; opacity: 0; 
+                visibility: hidden; transition: var(--transition); 
+            }
+            .overlay.active { opacity: 1; visibility: visible; }
+        }
+        
+        .fade-in {
+            opacity: 0; transform: translateY(30px);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+        }
+        .fade-in.visible { opacity: 1; transform: translateY(0); }
+    </style>
+</head>
+<body>
+    <header id="header">
+        <div class="container">
+            <nav>
+                <a href="index.html" class="logo">
+                    <img src="elegets-logo-cut.png" alt="Elegets logo" class="nav-logo">
+                    <span>Elegets</span>
+                </a>
+                <ul class="nav-links" id="navLinks">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="about.html">About</a></li>
+                    <li><a href="careers.html">Careers</a></li>
+                    <li><a href="intern.html">Internships</a></li>
+                    <li><a href="projects.html" class="active">Projects</a></li>
+                    <li><a href="contact.html">Contact</a></li>
+                </ul>
+                <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Open Menu">
+                    <span></span><span></span><span></span>
+                </button>
+            </nav>
+        </div>
+        <div class="overlay" id="overlay"></div>
+    </header>
+
+    <main>
+        <section class="page-hero">
+            <div class="page-hero-content fade-in">
+                <h1>Future Concepts & Innovations</h1>
+                <p>We are constantly exploring the next wave of technology. Here are some high-growth project ideas we are passionate about.</p>
+            </div>
+        </section>
+
+        <section class="projects-section">
+            <div class="container">
+                <div class="section-title fade-in">
+                    <h2>Innovative Project Blueprints</h2>
+                    <p>These concepts represent our focus on solving real-world problems in high-growth sectors relevant to the Indian and global markets.</p>
+                </div>
+
+                <div class="projects-grid">
+                    <div class="project-card fade-in">
+                        <div class="project-image"><img src="https://images.unsplash.com/photo-1581092921462-205205517b0a?auto=format&fit=crop&w=800&q=80" alt="Smart sensors in a farm field" loading="lazy"></div>
+                        <div class="project-content">
+                            <div class="project-tags">
+                                <span class="tag">Agri-Tech</span>
+                                <span class="tag">IoT</span>
+                            </div>
+                            <h3>Affordable Agri-Sensor Network</h3>
+                            <p><b>Problem Statement:</b> Indian small-hold farmers lack access to affordable technology for monitoring soil health (NPK, moisture) and micro-climates, leading to inefficient water/fertilizer use and lower crop yields.</p>
+                            <h4>SWOT Analysis</h4>
+                            <p>
+                                <b>Strengths:</b> In-house expertise in low-power embedded systems. <br>
+                                <b>Weaknesses:</b> Lack of established distribution channels in rural areas. <br>
+                                <b>Opportunities:</b> Massive untapped market; government subsidies for Agri-Tech. <br>
+                                <b>Threats:</b> Competition from established players; hardware durability in harsh conditions.
+                            </p>
+                            <a href="contact.html" class="btn-main">Discuss This Idea</a>
+                        </div>
+                    </div>
+
+                    <div class="project-card fade-in" style="transition-delay: 0.1s;">
+                        <div class="project-image"><img src="https://images.unsplash.com/photo-1555981149-a2491e5c5f24?auto=format&fit=crop&w=800&q=80" alt="Elderly person wearing a health monitoring watch" loading="lazy"></div>
+                        <div class="project-content">
+                            <div class="project-tags">
+                                <span class="tag">Health Tech</span>
+                                <span class="tag">Wearables</span>
+                            </div>
+                            <h3>Remote Vitals Monitor for Elderly Care</h3>
+                            <p><b>Problem Statement:</b> Families in Tier-2/3 cities need a low-cost, easy-to-use wearable to remotely monitor vital signs (SpO2, heart rate, fall detection) of elderly relatives, sending alerts to caregivers' phones.</p>
+                             <h4>SWOT Analysis</h4>
+                             <p>
+                                <b>Strengths:</b> Strong PCB design and firmware development capabilities. <br>
+                                <b>Weaknesses:</b> Navigating medical device regulations can be complex and slow. <br>
+                                <b>Opportunities:</b> Growing aging population; increasing smartphone penetration for caregiver apps. <br>
+                                <b>Threats:</b> Data privacy concerns; competition from Chinese manufacturers.
+                             </p>
+                             <a href="contact.html" class="btn-main">Discuss This Idea</a>
+                        </div>
+                    </div>
+
+                    <div class="project-card fade-in" style="transition-delay: 0.2s;">
+                        <div class="project-image"><img src="https://images.unsplash.com/photo-1534088230188-a4a71b169152?auto=format&fit=crop&w=800&q=80" alt="Electric vehicle charging station" loading="lazy"></div>
+                        <div class="project-content">
+                            <div class="project-tags">
+                                <span class="tag">EV Tech</span>
+                                <span class="tag">Automotive</span>
+                            </div>
+                            <h3>Advanced EV Battery Management System</h3>
+                            <p><b>Problem Statement:</b> The burgeoning Indian 2-wheeler EV market requires a robust, locally-developed Battery Management System (BMS) focused on thermal management, safety, and optimizing battery lifespan for local conditions.</p>
+                             <h4>SWOT Analysis</h4>
+                             <p>
+                                <b>Strengths:</b> Expertise in power electronics and controller design. <br>
+                                <b>Weaknesses:</b> High R&D investment required; dependency on imported battery cells. <br>
+                                <b>Opportunities:</b> "Make in India" initiative; massive growth in the EV scooter/motorcycle market. <br>
+                                <b>Threats:</b> Rapidly changing battery chemistries; established international BMS suppliers.
+                             </p>
+                             <a href="contact.html" class="btn-main">Discuss This Idea</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="cta-section">
+            <div class="container">
+                <div class="cta-content fade-in">
+                    <h2>Want to Build the Future With Us?</h2>
+                    <p>Our team of expert engineers is ready to turn these visions into reality. Let's discuss how we can collaborate and innovate together.</p>
+                    <a href="contact.html" class="cta-btn">Let's Talk</a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer id="footer">
+        <div class="container">
+            <div class="footer-grid">
+                 <div class="footer-col">
+                    <div class="logo" style="margin-bottom: 1.5rem;"><img src="elegets-logo-cut.png" alt="Elegets Electronics" class="nav-logo"><span>Elegets</span></div>
+                    <p style="color: rgba(255, 255, 255, 0.7);">Innovating the future of electronics for a smarter, more connected world.</p>
+                </div>
+                <div class="footer-col">
+                    <h3>Quick Links</h3>
+                    <ul class="footer-links">
+                        <li><a href="about.html">About Us</a></li><li><a href="careers.html">Careers</a></li>
+                        <li><a href="intern.html">Internships</a></li><li><a href="projects.html">Projects</a></li><li><a href="contact.html">Contact Us</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col"><h3>Contact Us</h3>
+                    <ul class="footer-links">
+                        <li style="display: flex; align-items: flex-start; gap: 10px;"><i class="fas fa-map-marker-alt" style="margin-top: 5px;"></i><span>123 Tech Park, Visakhapatnam, India 530041</span></li>
+                        <li style="display: flex; align-items: flex-start; gap: 10px;"><i class="fas fa-envelope" style="margin-top: 5px;"></i><span>contact.elegets@gmail.com</span></li>
+                        <li style="display: flex; align-items: flex-start; gap: 10px;"><i class="fas fa-phone" style="margin-top: 5px;"></i><span>+91 6302085024</span></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom"><p>© 2025 Elegets Electronics. All Rights Reserved.</p></div>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // --- UI & Navigation ---
+            const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+            const navLinks = document.getElementById('navLinks');
+            const overlay = document.getElementById('overlay');
+            const body = document.body;
+            const header = document.getElementById('header');
+
+            const toggleMenu = () => {
+                const isActive = navLinks.classList.toggle('active');
+                mobileMenuBtn.classList.toggle('active', isActive);
+                overlay.classList.toggle('active', isActive);
+                body.classList.toggle('no-scroll', isActive);
+            };
+            mobileMenuBtn.addEventListener('click', toggleMenu);
+            overlay.addEventListener('click', () => toggleMenu(false));
+            
+            window.addEventListener('scroll', () => header.classList.toggle('scrolled', window.scrollY > 50), { passive: true });
+
+            // --- Scroll Animations ---
+            const fadeElements = document.querySelectorAll('.fade-in');
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.1 });
+            fadeElements.forEach(el => observer.observe(el));
+        });
+    </script>
+</body>
+</html>
