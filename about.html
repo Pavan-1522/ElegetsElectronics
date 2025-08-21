@@ -709,7 +709,7 @@
                         .from('employees')
                         .select('full_name, position, department, email, hire_date, profile_pic_url, linkedin_url, github_url, instagram_url')
                         .order('created_at', { ascending: true })
-                        .limit(6); // Limit to 6 for a cleaner look
+                        .limit(9); // Limit to 9 for a cleaner look
 
                     if (error) throw error;
                     renderTeamMembers(data);
