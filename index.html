@@ -329,7 +329,7 @@
                     </div>
                     
                     
-                    <button id="launchBtn" onclick="launchSite()" class="btn btn-lg mt-4 px-5 py-3 btn-subscribe pulse">Launch Now</button>
+                    <button id="launchBtn" onclick="launchsite1()" class="btn btn-lg mt-4 px-5 py-3 btn-subscribe pulse">Launch Now</button>
                     
                 </div>
             </div>
@@ -492,6 +492,9 @@
       firebase.database().ref("/").update({
         launchStatus: true
       });
+    }
+    function launchsite1() {
+      alert("Launch Date 27/08/2025");
     }
     </script>
 </body>
