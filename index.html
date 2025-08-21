@@ -328,9 +328,9 @@
                         </div>
                     </div>
                     
-                    <button class="btn btn-lg mt-4 px-5 py-3 btn-subscribe pulse">
-                        <i class="fas fa-bell me-2"></i>Notify Me
-                    </button>
+                    
+                    <button id="launchBtn" onclick="launchSite()" class="btn btn-lg mt-4 px-5 py-3 btn-subscribe pulse">Launch Now</button>
+                    
                 </div>
             </div>
         </div>
@@ -341,7 +341,7 @@
             <div class="row justify-content-center mb-5">
                 <div class="col-md-8 text-center">
                     <h2 class="display-5 section-title">Meet Our Honored Guest</h2>
-                    <p class="lead section-subtitle">We are privileged to have a distinguished industry leader grace our launch event.</p>
+                    <p class="lead section-subtitle">We are honored to have a distinguished academic and renowned researcher grace our launch event</p>
                 </div>
             </div>
             
@@ -439,9 +439,11 @@
     </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
     
     <script>
-        const launchDate = new Date('Aug 21, 2025 18:15:00').getTime();
+        const launchDate = new Date('Aug 27, 2025 18:15:00').getTime();
         
         const countdown = setInterval(function() {
             const now = new Date().getTime();
@@ -462,6 +464,35 @@
                 document.querySelector('.countdown').innerHTML = "<h4 class='w-100'>We Have Launched!</h4>";
             }
         }, 1000);
+
+     const firebaseConfig = {
+        apiKey: "AIzaSyCCbrxl4PcYlDZvq_QmXl7mZG8xITqEwwY",
+        authDomain: "launch-94e35.firebaseapp.com",
+        projectId: "launch-94e35",
+        storageBucket: "launch-94e35.firebasestorage.app",
+        messagingSenderId: "1071676763026",
+        appId: "1:1071676763026:web:e48c0023945597f82caf4b",
+        measurementId: "G-TYCMS6BZYN"
+    };
+
+    const app = firebase.initializeApp(firebaseConfig);
+    const db = firebase.database();
+
+    // 🔹 Listen to DB
+    firebase.database().ref("launchStatus").on("value", (snapshot) => {
+      const launched = snapshot.val();
+      if (launched) {
+        // 👉 Redirect to your real site
+        window.location.href = "tempindex.html";
+      }
+    });
+
+    // 🔹 Launch Button
+    function launchSite() {
+      firebase.database().ref("/").update({
+        launchStatus: true
+      });
+    }
     </script>
 </body>
 </html>
