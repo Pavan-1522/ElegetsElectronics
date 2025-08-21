@@ -4,37 +4,57 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Elegets Electronics - Launching Soon</title>
-    <!-- Bootstrap 5 CSS -->
+    
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Font Awesome -->
+    
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Raleway:wght@300;400;600&display=swap" rel="stylesheet">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+
     <style>
+        /* --- NEW: Enhanced Styling --- */
         :root {
-            --primary: #6a11cb;
-            --secondary: #2575fc;
-            --accent: #ff416c;
+            --primary: #3a7bd5;
+            --secondary: #00d2ff;
+            --accent: #ff4b2b;
             --light: #f8f9fa;
-            --dark: #212529;
+            --dark: #333;
+            --text-muted: #6c757d;
         }
         
         body {
-            font-family: 'Raleway', sans-serif;
-            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            font-family: 'Poppins', sans-serif;
+            background-color: #f4f7f6; /* Softer background color */
             color: var(--dark);
             overflow-x: hidden;
+            line-height: 1.7;
         }
         
         h1, h2, h3, h4, h5 {
             font-family: 'Montserrat', sans-serif;
             font-weight: 700;
         }
-        
+
+        .section-title {
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+
+        .section-subtitle {
+            font-weight: 300;
+            color: var(--text-muted);
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* --- Hero Section --- */
         .hero-section {
-            background: linear-gradient(to right, var(--primary), var(--secondary));
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
             color: white;
-            padding: 100px 0;
+            padding: 120px 0;
             position: relative;
             overflow: hidden;
         }
@@ -42,18 +62,16 @@
         .hero-section::before {
             content: '';
             position: absolute;
-            top: 0;
+            bottom: -50px; /* Positioned at the bottom */
             left: 0;
             width: 100%;
-            height: 100%;
-            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="rgba(255,255,255,0.1)" d="M0,224L48,213.3C96,203,192,181,288,160C384,139,480,117,576,122.7C672,128,768,160,864,170.7C960,181,1056,171,1152,165.3C1248,160,1344,160,1392,160L1440,160L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path></svg>');
+            height: 200px; /* Wave height */
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="%23f4f7f6" fill-opacity="1" d="M0,160L48,176C96,192,192,224,288,218.7C384,213,480,171,576,149.3C672,128,768,128,864,149.3C960,171,1056,213,1152,224C1248,235,1344,213,1392,202.7L1440,192L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path></svg>');
             background-size: cover;
-            background-position: center;
-            opacity: 0.5;
         }
         
         .logo {
-            font-weight: 700;
+            font-weight: 800;
             font-size: 2.5rem;
             letter-spacing: 3px;
             text-transform: uppercase;
@@ -61,8 +79,12 @@
         }
         
         .launch-date {
-            font-size: 1.8rem;
+            font-size: 1.5rem;
             margin-bottom: 30px;
+            background: rgba(255,255,255,0.15);
+            padding: 10px 20px;
+            border-radius: 50px;
+            display: inline-block;
         }
         
         .countdown {
@@ -70,80 +92,101 @@
         }
         
         .countdown-box {
-            background: rgba(255, 255, 255, 0.2);
-            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
             padding: 20px;
             margin: 0 10px;
-            min-width: 100px;
+            min-width: 110px;
             backdrop-filter: blur(10px);
-            box-shadow: 0 8px 32px rgba(31, 38, 135, 0.37);
+            box-shadow: 0 8px 32px rgba(31, 38, 135, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.2);
         }
         
         .countdown-number {
             font-size: 3rem;
+            font-family: 'Montserrat', sans-serif;
             font-weight: 700;
         }
         
         .countdown-label {
-            font-size: 1rem;
+            font-size: 0.9rem;
             text-transform: uppercase;
             letter-spacing: 2px;
         }
         
+        /* --- MODIFIED: Chief Guest Section --- */
         .guest-section {
-            padding: 80px 0;
-            background: white;
+            padding: 100px 0;
+            background-color: #fff;
         }
-        
-        .guest-card {
-            background: linear-gradient(135deg, #f6d365 0%, #fda085 100%);
+
+        .guest-card-new {
+            background-color: var(--light);
             border-radius: 20px;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.1);
             overflow: hidden;
-            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+            padding: 40px;
             transition: transform 0.3s ease;
         }
-        
-        .guest-card:hover {
+
+        .guest-card-new:hover {
             transform: translateY(-10px);
         }
-        
+
+        /* NEW: This creates the circular frame */
+        .guest-img-frame {
+            width: 250px;
+            height: 250px;
+            margin: 0 auto 30px;
+            border-radius: 50%;
+            overflow: hidden;
+            border: 8px solid var(--primary);
+            box-shadow: 0 10px 20px rgba(58, 123, 213, 0.3);
+        }
+
         .guest-img {
-            height: 700px;
-            object-fit: cover;
             width: 100%;
+            height: 100%;
+            object-fit: cover; /* This prevents the image from stretching */
         }
         
         .guest-info {
-            padding: 25px;
-            color: white;
-            background: linear-gradient(135deg, #f6d365 0%, #fda085 100%);
+            color: var(--dark);
+            text-align: center;
         }
         
         .guest-name {
-            font-size: 1.8rem;
+            font-size: 2.2rem;
+            color: var(--dark);
             margin-bottom: 10px;
         }
         
         .guest-designation {
             font-size: 1.1rem;
-            opacity: 0.9;
+            color: var(--primary);
+            font-weight: 600;
             margin-bottom: 15px;
+        }
+
+        .guest-bio {
+            color: var(--text-muted);
         }
         
         .social-links a {
-            color: white;
+            color: var(--primary);
             font-size: 1.5rem;
-            margin-right: 15px;
+            margin: 0 10px;
             transition: all 0.3s ease;
         }
         
         .social-links a:hover {
-            color: var(--primary);
+            color: var(--accent);
             transform: translateY(-3px);
         }
         
+        /* --- Features Section --- */
         .features-section {
-            padding: 80px 0;
+            padding: 100px 0;
             background: linear-gradient(to right, #4facfe 0%, #00f2fe 100%);
             color: white;
         }
@@ -151,26 +194,30 @@
         .feature-box {
             text-align: center;
             padding: 30px;
-            background: rgba(255, 255, 255, 0.2);
+            background: rgba(255, 255, 255, 0.15);
             border-radius: 15px;
             margin: 15px 0;
             backdrop-filter: blur(5px);
             transition: all 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            height: 100%; /* Make boxes equal height */
         }
         
         .feature-box:hover {
-            transform: translateY(-10px);
-            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-10px) scale(1.02);
+            background: rgba(255, 255, 255, 0.25);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.1);
         }
         
         .feature-icon {
             font-size: 3rem;
             margin-bottom: 20px;
+            color: #fff;
         }
         
+        /* --- Newsletter Section --- */
         .newsletter-section {
-            padding: 80px 0;
-            background: white;
+            padding: 100px 0;
         }
         
         .newsletter-form {
@@ -178,6 +225,7 @@
             padding: 50px;
             border-radius: 20px;
             color: white;
+            box-shadow: 0 20px 40px rgba(58, 123, 213, 0.4);
         }
         
         .btn-subscribe {
@@ -187,77 +235,75 @@
             border-radius: 30px;
             font-weight: 600;
             transition: all 0.3s ease;
+            border: 2px solid var(--accent);
         }
         
         .btn-subscribe:hover {
             background: white;
             color: var(--accent);
             transform: translateY(-3px);
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
         }
         
+        /* --- Footer --- */
         footer {
             background: var(--dark);
-            color: white;
-            padding: 40px 0;
+            color: #ccc;
+            padding: 60px 0 20px 0;
+        }
+
+        footer .logo {
+            color: #fff;
+            font-size: 1.8rem;
+        }
+
+        footer .social-links a {
+            color: #fff;
+        }
+        footer .social-links a:hover {
+            color: var(--secondary);
         }
         
-        .animated-border {
-            height: 5px;
-            width: 100%;
-            background: linear-gradient(to right, var(--primary), var(--secondary), var(--accent));
-            background-size: 200% auto;
-            animation: gradientMove 3s linear infinite;
-        }
-        
-        @keyframes gradientMove {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
-        
+        /* --- Animations --- */
         .pulse {
             animation: pulse 2s infinite;
         }
         
         @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-            100% { transform: scale(1); }
+            0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 75, 43, 0.7); }
+            70% { transform: scale(1.05); box-shadow: 0 0 0 20px rgba(255, 75, 43, 0); }
+            100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 75, 43, 0); }
         }
         
-        /* Responsive adjustments */
+        /* --- Responsive Adjustments --- */
         @media (max-width: 768px) {
             .countdown-box {
                 margin: 10px 5px;
                 min-width: 70px;
             }
-            
             .countdown-number {
                 font-size: 2rem;
             }
-            
-            .guest-img {
-                height: 250px;
+            .guest-img-frame {
+                width: 180px;
+                height: 180px;
             }
         }
     </style>
 </head>
 <body>
-    <!-- Hero Section -->
-    <section class="hero-section text-center">
-        <div class="container">
+
+    <section class="hero-section text-center position-relative">
+        <div class="container position-relative">
             <div class="row justify-content-center">
                 <div class="col-md-10 col-lg-8">
                     <div class="logo">Elegets Electronics</div>
                     <h1 class="display-4 mb-4">The Future of Technology Is Coming</h1>
-                    <p class="lead mb-5">Revolutionizing the electronics industry with cutting-edge innovation and unparalleled performance</p>
+                    <p class="lead mb-4">Revolutionizing the electronics industry with cutting-edge innovation and unparalleled performance.</p>
                     
                     <div class="launch-date">
-                        <i class="far fa-calendar-alt me-2"></i>Launching on: August 21, 2025 at 06:05 PM
+                        <i class="far fa-calendar-alt me-2"></i>Launching: August 21, 2025 at 06:05 PM
                     </div>
                     
-                    <!-- Countdown Timer -->
                     <div class="countdown d-flex justify-content-center flex-wrap">
                         <div class="countdown-box text-center">
                             <div class="countdown-number" id="days">00</div>
@@ -277,7 +323,7 @@
                         </div>
                     </div>
                     
-                    <button class="btn btn-light btn-lg mt-4 px-5 py-3 pulse">
+                    <button class="btn btn-lg mt-4 px-5 py-3 btn-subscribe pulse">
                         <i class="fas fa-bell me-2"></i>Notify Me
                     </button>
                 </div>
@@ -285,31 +331,29 @@
         </div>
     </section>
     
-    <div class="animated-border"></div>
-    
-    <!-- Chief Guest Section -->
     <section class="guest-section">
         <div class="container">
             <div class="row justify-content-center mb-5">
                 <div class="col-md-8 text-center">
-                    <h2 class="display-4 mb-3">Our Chief Guest</h2>
-                    <p class="lead">We are honored to have a distinguished industry leader grace our launch event</p>
+                    <h2 class="display-5 section-title">Meet Our Honored Guest</h2>
+                    <p class="lead section-subtitle">We are privileged to have a distinguished industry leader grace our launch event.</p>
                 </div>
             </div>
             
             <div class="row justify-content-center">
                 <div class="col-md-10 col-lg-8">
-                    <div class="guest-card">
-                        <img src="dash.jpg" alt="Chief Guest" class="guest-img">
+                    <div class="guest-card-new">
+                        <div class="guest-img-frame">
+                             <img src="dash.jpg" alt="Chief Guest Dr. Bimalendu Dash" class="guest-img">
+                        </div>
                         <div class="guest-info">
-                            <h3 class="guest-name">Dr. Sarah Johnson</h3>
-                            <p class="guest-designation">CEO of TechVision International & Innovation Thought Leader</p>
-                            <p>With over 20 years of experience in the electronics industry, Dr. Johnson has been at the forefront of technological innovation and has received numerous awards for her contributions to the field.</p>
+                            <h3 class="guest-name">Dr. Bimalendu Dash</h3>
+                            <p class="guest-designation">Senior Assistant Professor, Department of Civil Engineering</p>
+                            <p class="guest-bio">With over 9 years of experience in teaching, mentoring, and research, Dr. Bimalendu Dash is an accomplished academic who has published numerous research papers and received several awards for his contributions to the field..</p>
                             <div class="social-links mt-4">
-                                <a href="#"><i class="fab fa-twitter"></i></a>
-                                <a href="#"><i class="fab fa-linkedin"></i></a>
-                                <a href="#"><i class="fab fa-instagram"></i></a>
-                                <a href="#"><i class="fas fa-globe"></i></a>
+                                <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                                <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin"></i></a>
+                                <a href="#" aria-label="Website"><i class="fas fa-globe"></i></a>
                             </div>
                         </div>
                     </div>
@@ -318,42 +362,33 @@
         </div>
     </section>
     
-    <div class="animated-border"></div>
-    
-    <!-- Features Section -->
     <section class="features-section">
         <div class="container">
             <div class="row justify-content-center mb-5">
                 <div class="col-md-8 text-center">
-                    <h2 class="display-4 mb-3">Innovative Features</h2>
-                    <p class="lead">Discover what makes Elegets Electronics the next big thing in technology</p>
+                    <h2 class="display-5 text-white mb-3">Innovative Features</h2>
+                    <p class="lead" style="color: rgba(255,255,255,0.8);">Discover what makes Elegets Electronics the next big thing.</p>
                 </div>
             </div>
             
             <div class="row">
-                <div class="col-md-4">
+                <div class="col-md-4 mb-4">
                     <div class="feature-box">
-                        <div class="feature-icon">
-                            <i class="fas fa-bolt"></i>
-                        </div>
+                        <div class="feature-icon"><i class="fas fa-bolt"></i></div>
                         <h4>Ultra-Fast Performance</h4>
                         <p>Experience blazing speed with our next-generation processors and optimized architecture.</p>
                     </div>
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-4 mb-4">
                     <div class="feature-box">
-                        <div class="feature-icon">
-                            <i class="fas fa-leaf"></i>
-                        </div>
+                        <div class="feature-icon"><i class="fas fa-leaf"></i></div>
                         <h4>Eco-Friendly Design</h4>
                         <p>Sustainable technology made from recycled materials with low energy consumption.</p>
                     </div>
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-4 mb-4">
                     <div class="feature-box">
-                        <div class="feature-icon">
-                            <i class="fas fa-infinity"></i>
-                        </div>
+                        <div class="feature-icon"><i class="fas fa-infinity"></i></div>
                         <h4>Longest Battery Life</h4>
                         <p>Industry-leading battery technology that keeps you powered all day and beyond.</p>
                     </div>
@@ -362,20 +397,19 @@
         </div>
     </section>
     
-    <!-- Newsletter Section -->
     <section class="newsletter-section">
         <div class="container">
             <div class="row justify-content-center">
                 <div class="col-md-10 col-lg-8">
                     <div class="newsletter-form text-center rounded">
-                        <h3 class="mb-4">Get Notified When We Launch</h3>
-                        <p class="mb-4">Be the first to know about our exciting new products and exclusive offers</p>
+                        <h3 class="mb-3">Don't Miss Out!</h3>
+                        <p class="mb-4">Be the first to know about our exciting new products and exclusive launch-day offers.</p>
                         
                         <form class="row g-3 justify-content-center">
-                            <div class="col-md-8">
-                                <input type="email" class="form-control form-control-lg" placeholder="Enter your email address">
+                            <div class="col-lg-8">
+                                <input type="email" class="form-control form-control-lg" placeholder="Enter your email address" required>
                             </div>
-                            <div class="col-md-4">
+                            <div class="col-lg-4">
                                 <button type="submit" class="btn btn-subscribe btn-lg w-100">Subscribe</button>
                             </div>
                         </form>
@@ -387,50 +421,40 @@
     
     <footer class="text-center">
         <div class="container">
-            <div class="logo text-white mb-3">Elegets Electronics</div>
-            <p class="mb-4">Redefining technology for a better tomorrow</p>
+            <div class="logo mb-3">Elegets Electronics</div>
+            <p class="mb-4">Redefining technology for a better tomorrow.</p>
             <div class="social-links mb-4">
-                <a href="#"><i class="fab fa-facebook-f"></i></a>
-                <a href="#"><i class="fab fa-twitter"></i></a>
-                <a href="#"><i class="fab fa-instagram"></i></a>
-                <a href="#"><i class="fab fa-linkedin-in"></i></a>
-                <a href="#"><i class="fab fa-youtube"></i></a>
+                <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
             </div>
-            <p>© 2023 Elegets Electronics. All Rights Reserved.</p>
+            <p class="text-white-50">© 2025 Elegets Electronics. All Rights Reserved.</p>
         </div>
     </footer>
 
-    <!-- Bootstrap JS with Popper -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
-    <!-- Countdown Timer Script -->
+    
     <script>
-        // Set the launch date and time
         const launchDate = new Date('Aug 21, 2025 18:05:00').getTime();
         
-        // Update the countdown every second
         const countdown = setInterval(function() {
             const now = new Date().getTime();
             const distance = launchDate - now;
             
-            // Calculate days, hours, minutes, seconds
             const days = Math.floor(distance / (1000 * 60 * 60 * 24));
             const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
             const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
             const seconds = Math.floor((distance % (1000 * 60)) / 1000);
             
-            // Display the results
             document.getElementById('days').innerText = days.toString().padStart(2, '0');
             document.getElementById('hours').innerText = hours.toString().padStart(2, '0');
             document.getElementById('minutes').innerText = minutes.toString().padStart(2, '0');
             document.getElementById('seconds').innerText = seconds.toString().padStart(2, '0');
             
-            // If the countdown is over, display a message
             if (distance < 0) {
                 clearInterval(countdown);
-                document.getElementById('days').innerText = '00';
-                document.getElementById('hours').innerText = '00';
-                document.getElementById('minutes').innerText = '00';
-                document.getElementById('seconds').innerText = '00';
+                document.querySelector('.countdown').innerHTML = "<h4 class='w-100'>We Have Launched!</h4>";
             }
         }, 1000);
     </script>
