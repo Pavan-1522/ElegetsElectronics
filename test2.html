@@ -1,0 +1,691 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Elegets Electronics | Next-Gen Electronic Solutions</title>
+    <meta name="description" content="Elegets Electronics - Innovating the future of electronics with cutting-edge solutions for IoT, embedded systems, and smart technology.">
+    <link rel="icon" href="elegets-logo-cut.png" type="image/png">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        /* --- YOUR EXISTING WEBSITE CSS --- */
+        :root {
+            --primary: #0D253F;
+            --primary-light: #2A4A6E;
+            --primary-dark: #071729;
+            --secondary: #01B4E4;
+            --secondary-light: #e0f7fa;
+            --accent: #F4A261;
+            --dark: #121212;
+            --light: #F8F9FA;
+            --light-gray: #f1f3f5;
+            --medium-gray: #dee2e6;
+            --gray: #6c757d;
+            --white: #ffffff;
+            --shadow-sm: 0 4px 6px rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 10px 15px rgba(0, 0, 0, 0.08);
+            --shadow-lg: 0 20px 25px rgba(0, 0, 0, 0.1);
+            --transition: all 0.35s cubic-bezier(0.25, 0.8, 0.25, 1);
+            --border-radius: 12px;
+            --border-radius-lg: 20px;
+            --font-primary: 'Montserrat', sans-serif;
+            --font-secondary: 'Poppins', sans-serif;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; scroll-padding-top: 90px; }
+        body { font-family: var(--font-secondary); background-color: var(--light); color: var(--dark); overflow-x: hidden; line-height: 1.7; }
+        body.no-scroll { overflow: hidden; }
+        /* ... (The rest of your extensive website CSS) ... */
+        .fade-in { opacity: 0; transform: translateY(30px); transition: opacity 0.8s ease-out, transform 0.8s ease-out; }
+        .fade-in.visible { opacity: 1; transform: translateY(0); }
+
+        /* --- START: ADVANCED CHATBOT WIDGET STYLES --- */
+        #elegets-chat-toggle-btn {
+            position: fixed; bottom: 20px; right: 20px;
+            width: 60px; height: 60px;
+            background-color: var(--primary); color: var(--white);
+            border: none; border-radius: 50%; box-shadow: var(--shadow-md);
+            cursor: pointer; display: flex; justify-content: center; align-items: center;
+            font-size: 2rem; z-index: 1001; transition: var(--transition);
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(13, 37, 63, 0.7); }
+            70% { box-shadow: 0 0 0 10px rgba(13, 37, 63, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(13, 37, 63, 0); }
+        }
+        #elegets-chat-toggle-btn:hover { transform: scale(1.1); background-color: var(--primary-light); animation: none; }
+        #elegets-chat-toggle-btn.new-notification::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 12px;
+            height: 12px;
+            background-color: var(--accent);
+            border-radius: 50%;
+            border: 2px solid var(--primary);
+        }
+
+        #elegets-chat-popup {
+            --chat-font: 'Fira Code', monospace;
+            --chat-light-bg: #ffffff; --chat-light-text: #1c1c1e;
+            --chat-light-bubble: #eef1f5; --chat-light-border: #e0e0e0;
+            --chat-dark-bg: #212529; --chat-dark-text: #e4e6eb;
+            --chat-dark-bubble: #343a40; --chat-dark-border: #3a3b3c;
+            
+            position: fixed; bottom: 90px; right: 20px;
+            width: 90vw; max-width: 400px; height: 70vh; max-height: 600px;
+            border-radius: var(--border-radius-lg); box-shadow: var(--shadow-lg);
+            display: flex; flex-direction: column; overflow: hidden;
+            z-index: 1002; opacity: 0; transform: translateY(20px) scale(0.95); pointer-events: none;
+            transition: opacity 0.3s ease, transform 0.3s ease, background-color 0.3s ease;
+            font-family: var(--chat-font);
+            background-color: var(--chat-light-bg); color: var(--chat-light-text);
+        }
+        #elegets-chat-popup.active { opacity: 1; transform: translateY(0) scale(1); pointer-events: auto; }
+        #elegets-chat-popup.dark-mode { background-color: var(--chat-dark-bg); color: var(--chat-dark-text); }
+        
+        #elegets-chat-popup .chat-header {
+            padding: 15px; border-bottom: 1px solid var(--chat-light-border);
+            font-weight: bold; flex-shrink: 0;
+            display: flex; justify-content: space-between; align-items: center;
+            background-color: var(--primary); color: white;
+        }
+        #elegets-chat-popup.dark-mode .chat-header { 
+            border-bottom-color: var(--chat-dark-border); 
+            background-color: var(--primary-dark);
+        }
+        #elegets-chat-popup .chat-header .header-content {
+            display: flex; align-items: center; gap: 10px;
+        }
+        #elegets-chat-popup .chat-header .header-content .status-indicator {
+            width: 8px; height: 8px; border-radius: 50%; background-color: #4ade80;
+        }
+        #elegets-chat-popup .header-actions {
+            display: flex; gap: 10px;
+        }
+        #elegets-chat-popup .header-actions button {
+            background: none; border: none; color: white; cursor: pointer;
+            font-size: 1.2rem; opacity: 0.8; transition: var(--transition);
+        }
+        #elegets-chat-popup .header-actions button:hover { opacity: 1; }
+        
+        #elegets-chat-popup .chat-window { 
+            flex-grow: 1; overflow-y: auto; padding: 20px; 
+            scroll-behavior: smooth;
+        }
+        /* Custom scrollbar for chat window */
+        #elegets-chat-popup .chat-window::-webkit-scrollbar {
+            width: 6px;
+        }
+        #elegets-chat-popup .chat-window::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        #elegets-chat-popup .chat-window::-webkit-scrollbar-thumb {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 3px;
+        }
+        #elegets-chat-popup.dark-mode .chat-window::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.2);
+        }
+        
+        #elegets-chat-popup .message { margin-bottom: 20px; animation: fadeIn 0.5s ease-out; position: relative; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        #elegets-chat-popup .bot .content {
+            background-color: var(--chat-light-bubble); padding: 12px 18px;
+            border-radius: 18px; border-bottom-left-radius: 5px;
+            display: inline-block; max-width: 95%; word-wrap: break-word;
+            position: relative;
+        }
+        #elegets-chat-popup.dark-mode .bot .content { background-color: var(--chat-dark-bubble); }
+        
+        #elegets-chat-popup .user .content {
+            background: var(--secondary); color: var(--primary-dark);
+            padding: 12px 18px; border-radius: 18px; border-bottom-right-radius: 5px;
+            float: right; max-width: 90%; word-wrap: break-word; clear: both;
+        }
+
+        /* Message timestamp */
+        #elegets-chat-popup .message .timestamp {
+            font-size: 0.7rem; opacity: 0.6; margin-top: 5px;
+        }
+        #elegets-chat-popup .user .timestamp { text-align: right; }
+
+        /* --- Advanced Code Block & Loader Styles --- */
+        #elegets-chat-popup .bot pre {
+            position: relative; background-color: #1e1e1e; color: #d4d4d4;
+            padding: 16px; border-radius: 8px; overflow-x: auto;
+            font-size: 0.9rem; margin: 10px 0;
+        }
+        #elegets-chat-popup .copy-code-btn {
+            position: absolute; top: 10px; right: 10px;
+            background-color: rgba(255, 255, 255, 0.1); color: var(--white);
+            border: none; padding: 4px 8px; border-radius: 6px;
+            cursor: pointer; opacity: 0; transition: var(--transition);
+            font-size: 0.8rem; display: flex; align-items: center; gap: 5px;
+        }
+        #elegets-chat-popup pre:hover .copy-code-btn { opacity: 1; }
+        #elegets-chat-popup .copy-code-btn.copied { background-color: var(--accent); }
+        
+        #code-loader { display: none; text-align: center; padding: 20px; }
+        #code-loader .loader-animation {
+            font-family: var(--chat-font); color: var(--secondary);
+            font-size: 1.2rem; margin-bottom: 15px;
+        }
+        #code-loader .loader-animation::after {
+            content: '█'; display: inline-block;
+            animation: blink 1s step-end infinite;
+        }
+        @keyframes blink { 50% { opacity: 0; } }
+        #code-loader .quote { font-size: 0.85rem; color: var(--gray); font-style: italic; }
+
+        /* --- Action Buttons Styles --- */
+        #elegets-chat-popup .message-actions {
+            display: flex; gap: 8px; position: absolute;
+            bottom: -15px; right: 0;
+            opacity: 0; transition: var(--transition);
+        }
+        #elegets-chat-popup .bot:hover .message-actions { opacity: 1; bottom: -25px; }
+        .action-btn {
+            background: var(--chat-light-bubble); color: var(--gray);
+            border: 1px solid var(--chat-light-border); border-radius: 50%;
+            width: 30px; height: 30px; display: flex;
+            justify-content: center; align-items: center;
+            cursor: pointer; font-size: 0.9rem;
+        }
+        #elegets-chat-popup.dark-mode .action-btn { background: var(--chat-dark-bubble); border-color: var(--chat-dark-border); }
+        .action-btn:hover { background: var(--secondary); color: var(--white); }
+        .action-btn.copied { background: var(--accent); color: var(--white); }
+
+        /* --- Input Area --- */
+        #elegets-chat-popup .chat-input-area { 
+            display: flex; padding: 10px; border-top: 1px solid var(--chat-light-border); 
+            flex-shrink: 0; background-color: rgba(0,0,0,0.02);
+        }
+        #elegets-chat-popup.dark-mode .chat-input-area { 
+            border-top-color: var(--chat-dark-border); 
+            background-color: rgba(255,255,255,0.05);
+        }
+        #elegets-chat-popup #chat-input { 
+            flex-grow: 1; border: none; border-radius: 20px; padding: 10px 15px; 
+            font-family: var(--chat-font); background-color: #f1f1f1; 
+            transition: var(--transition);
+        }
+        #elegets-chat-popup.dark-mode #chat-input { background-color: #555; color: white; }
+        #elegets-chat-popup #chat-input:focus { outline: none; box-shadow: 0 0 0 2px var(--secondary); }
+        #elegets-chat-popup #send-btn { 
+            background: var(--secondary); color: var(--primary-dark); border: none; 
+            border-radius: 50%; width: 40px; height: 40px; margin-left: 10px; 
+            cursor: pointer; font-size: 1.5rem; display: flex; justify-content: center; 
+            align-items: center; transition: var(--transition);
+        }
+        #elegets-chat-popup #send-btn:hover { transform: scale(1.05); }
+        #elegets-chat-popup #send-btn:disabled { 
+            background: var(--gray); cursor: not-allowed; transform: none;
+        }
+
+        /* Quick Actions */
+        #elegets-chat-popup .quick-actions {
+            display: flex; flex-wrap: wrap; gap: 8px; padding: 10px 15px;
+            border-top: 1px solid var(--chat-light-border);
+        }
+        #elegets-chat-popup.dark-mode .quick-actions { border-top-color: var(--chat-dark-border); }
+        .quick-action-btn {
+            background: var(--chat-light-bubble); border: none; border-radius: 20px;
+            padding: 6px 12px; font-size: 0.8rem; cursor: pointer;
+            transition: var(--transition); font-family: var(--chat-font);
+        }
+        #elegets-chat-popup.dark-mode .quick-action-btn { background: var(--chat-dark-bubble); color: var(--chat-dark-text); }
+        .quick-action-btn:hover { background: var(--secondary); color: var(--primary-dark); }
+
+        /* Typing indicator */
+        .typing-indicator {
+            display: flex; align-items: center; gap: 5px; padding: 10px 15px;
+        }
+        .typing-dot {
+            width: 8px; height: 8px; border-radius: 50%; background-color: var(--gray);
+            animation: typingAnimation 1.4s infinite ease-in-out;
+        }
+        .typing-dot:nth-child(1) { animation-delay: -0.32s; }
+        .typing-dot:nth-child(2) { animation-delay: -0.16s; }
+        @keyframes typingAnimation {
+            0%, 80%, 100% { transform: scale(0.8); opacity: 0.5; }
+            40% { transform: scale(1); opacity: 1; }
+        }
+
+        /* Welcome message */
+        .welcome-message {
+            text-align: center; padding: 15px; margin-bottom: 15px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            color: white; border-radius: var(--border-radius);
+        }
+
+        /* Message reactions */
+        .message-reactions {
+            display: flex; gap: 5px; margin-top: 8px;
+        }
+        .reaction-btn {
+            background: none; border: 1px solid var(--chat-light-border); 
+            border-radius: 12px; padding: 2px 6px; font-size: 0.7rem;
+            cursor: pointer; transition: var(--transition);
+        }
+        #elegets-chat-popup.dark-mode .reaction-btn { border-color: var(--chat-dark-border); }
+        .reaction-btn:hover { background: var(--secondary); color: var(--primary-dark); }
+        .reaction-btn.active { background: var(--accent); color: white; }
+
+        /* Suggestions after response */
+        .suggestions {
+            display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px;
+        }
+        .suggestion-btn {
+            background: var(--chat-light-bubble); border: none; border-radius: 16px;
+            padding: 6px 12px; font-size: 0.75rem; cursor: pointer;
+            transition: var(--transition);
+        }
+        #elegets-chat-popup.dark-mode .suggestion-btn { background: var(--chat-dark-bubble); }
+        .suggestion-btn:hover { background: var(--secondary); color: var(--primary-dark); }
+
+        @media (max-width: 480px) {
+            #elegets-chat-popup { right: 10px; bottom: 80px; width: calc(100vw - 20px); }
+            #elegets-chat-toggle-btn { right: 10px; bottom: 10px; }
+            .quick-actions { justify-content: center; }
+        }
+        /* --- END: ADVANCED CHATBOT WIDGET STYLES --- */
+    </style>
+</head>
+<body>
+    
+    <header id="header"></header>
+    <main id="main-content"></main>
+    <footer id="footer"></footer>
+
+    <div id="elegets-chat-popup">
+        <div class="chat-header">
+            <div class="header-content">
+                <div class="status-indicator"></div>
+                <span>Elegets AI</span>
+            </div>
+            <div class="header-actions">
+                <button class="clear-chat" aria-label="Clear Chat" title="Clear Chat">
+                    <ion-icon name="trash-outline"></ion-icon>
+                </button>
+                <button class="theme-toggle" aria-label="Toggle Dark Mode" title="Toggle Theme">
+                    <ion-icon name="moon"></ion-icon>
+                </button>
+                <button class="minimize-chat" aria-label="Minimize Chat" title="Minimize">
+                    <ion-icon name="chevron-down-outline"></ion-icon>
+                </button>
+            </div>
+        </div>
+        <div class="chat-window">
+            <div class="welcome-message">
+                <h3>Welcome to Elegets AI Assistant</h3>
+                <p>How can I help with your electronics project today?</p>
+            </div>
+            <div class="quick-actions">
+                <button class="quick-action-btn" data-prompt="Show me ESP32 code for blinking an LED">ESP32 LED Blink</button>
+                <button class="quick-action-btn" data-prompt="Help with IoT sensor integration">IoT Sensors</button>
+                <button class="quick-action-btn" data-prompt="Explain embedded systems design">Embedded Systems</button>
+                <button class="quick-action-btn" data-prompt="PCB design best practices">PCB Design</button>
+            </div>
+        </div>
+        <div id="code-loader">
+            <div class="loader-animation">> Generating code...</div>
+            <p class="quote"></p>
+        </div>
+        <div class="chat-input-area">
+            <input type="text" id="chat-input" placeholder="Ask about electronics, code, or IoT...">
+            <button id="send-btn"><ion-icon name="send"></ion-icon></button>
+        </div>
+    </div>
+    <button id="elegets-chat-toggle-btn" aria-label="Open Chat">
+        <ion-icon name="chatbubbles-outline"></ion-icon>
+    </button>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+    
+    <script defer>
+        // --- YOUR EXISTING WEBSITE JAVASCRIPT ---
+        document.addEventListener('DOMContentLoaded', () => { /* ... your main site's script ... */ });
+
+        // --- START: ADVANCED CHATBOT WIDGET JAVASCRIPT ---
+        document.addEventListener('DOMContentLoaded', () => {
+            const BACKEND_URL = 'https://elegets-chatbot1.vercel.app/'; // <<<--- UPDATE YOUR URL HERE
+            
+            const techQuotes = [
+                "The best way to predict the future is to invent it. – Alan Kay",
+                "Code is like humor. When you have to explain it, it's bad. – Cory House",
+                "First, solve the problem. Then, write the code. – John Johnson",
+                "Any fool can write code that a computer can understand. Good programmers write code that humans can understand. – Martin Fowler",
+                "Measuring programming progress by lines of code is like measuring aircraft building progress by weight. – Bill Gates"
+            ];
+
+            const quickSuggestions = [
+                "Can you explain that in more detail?",
+                "Show me a practical example",
+                "What are the alternatives?",
+                "How does this work with IoT?"
+            ];
+            
+            const toggleBtn = document.getElementById('elegets-chat-toggle-btn');
+            const chatPopup = document.getElementById('elegets-chat-popup');
+            const chatWindow = chatPopup.querySelector('.chat-window');
+            const chatInput = chatPopup.querySelector('#chat-input');
+            const sendBtn = chatPopup.querySelector('#send-btn');
+            const toggleIcon = toggleBtn.querySelector('ion-icon');
+            const themeToggle = chatPopup.querySelector('.theme-toggle');
+            const themeIcon = themeToggle.querySelector('ion-icon');
+            const clearChatBtn = chatPopup.querySelector('.clear-chat');
+            const minimizeBtn = chatPopup.querySelector('.minimize-chat');
+            const codeLoader = document.getElementById('code-loader');
+            const quickActionBtns = document.querySelectorAll('.quick-action-btn');
+
+            // Initialize chat state
+            let chatHistory = [];
+            let isTyping = false;
+            let messageCount = 0;
+
+            // Check for saved theme preference
+            if (localStorage.getItem('chatTheme') === 'dark') {
+                chatPopup.classList.add('dark-mode');
+                themeIcon.name = 'sunny';
+            }
+
+            toggleBtn.addEventListener('click', () => {
+                chatPopup.classList.toggle('active');
+                toggleIcon.name = chatPopup.classList.contains('active') ? 'close-outline' : 'chatbubbles-outline';
+                
+                // Remove notification indicator when opened
+                if (chatPopup.classList.contains('active')) {
+                    toggleBtn.classList.remove('new-notification');
+                }
+                
+                // Focus input when opened
+                if (chatPopup.classList.contains('active')) {
+                    setTimeout(() => chatInput.focus(), 300);
+                }
+            });
+            
+            themeToggle.addEventListener('click', () => {
+                chatPopup.classList.toggle('dark-mode');
+                themeIcon.name = chatPopup.classList.contains('dark-mode') ? 'sunny' : 'moon';
+                
+                // Save preference
+                localStorage.setItem('chatTheme', chatPopup.classList.contains('dark-mode') ? 'dark' : 'light');
+            });
+
+            clearChatBtn.addEventListener('click', () => {
+                if (confirm('Clear all chat messages?')) {
+                    // Keep welcome message and quick actions
+                    const welcomeMsg = chatWindow.querySelector('.welcome-message');
+                    const quickActions = chatWindow.querySelector('.quick-actions');
+                    
+                    chatWindow.innerHTML = '';
+                    if (welcomeMsg) chatWindow.appendChild(welcomeMsg);
+                    if (quickActions) chatWindow.appendChild(quickActions);
+                    
+                    chatHistory = [];
+                    messageCount = 0;
+                }
+            });
+
+            minimizeBtn.addEventListener('click', () => {
+                chatPopup.classList.remove('active');
+                toggleIcon.name = 'chatbubbles-outline';
+            });
+
+            // Quick action buttons
+            quickActionBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const prompt = btn.getAttribute('data-prompt');
+                    chatInput.value = prompt;
+                    sendMessage();
+                });
+            });
+
+            const sendMessage = async () => {
+                const messageText = chatInput.value.trim();
+                if (messageText === '' || isTyping) return;
+                
+                appendMessage('user', messageText);
+                chatInput.value = '';
+                sendBtn.disabled = true;
+                isTyping = true;
+                
+                // Add to chat history
+                chatHistory.push({ role: 'user', content: messageText });
+                messageCount++;
+                
+                const isCodeRequest = /code|write|script|function|html|css|python|java|esp32|arduino/i.test(messageText);
+                isCodeRequest ? showCodeLoader() : showTypingIndicator();
+
+                try {
+                    const response = await fetch(BACKEND_URL, {
+                        method: 'POST', 
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ 
+                            message: messageText,
+                            history: chatHistory.slice(-5) // Send last 5 messages for context
+                        })
+                    });
+                    
+                    if (!response.ok) throw new Error('Network error');
+                    const data = await response.json();
+                    
+                    // Add to chat history
+                    chatHistory.push({ role: 'assistant', content: data.reply });
+                    
+                    hideAllLoaders();
+                    appendMessage('bot', data.reply, true);
+                    
+                    // Add suggestions after bot response
+                    addResponseSuggestions();
+                    
+                } catch (error) {
+                    hideAllLoaders();
+                    appendMessage('bot', 'Sorry, I encountered an error. Please try again or check your connection.');
+                    console.error('Fetch error:', error);
+                } finally {
+                    isTyping = false;
+                    sendBtn.disabled = false;
+                }
+            };
+
+            const appendMessage = (sender, text, isMarkdown = false) => {
+                const messageWrapper = document.createElement('div');
+                messageWrapper.className = `message ${sender}`;
+                
+                const contentDiv = document.createElement('div');
+                contentDiv.className = 'content';
+                
+                if (isMarkdown && window.marked) {
+                    contentDiv.innerHTML = marked.parse(text);
+                } else {
+                    contentDiv.innerText = text;
+                }
+                
+                // Add timestamp
+                const timestamp = document.createElement('div');
+                timestamp.className = 'timestamp';
+                timestamp.textContent = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                
+                messageWrapper.appendChild(contentDiv);
+                messageWrapper.appendChild(timestamp);
+                chatWindow.appendChild(messageWrapper);
+                
+                if (sender === 'bot') {
+                    addCodeCopyButtons(contentDiv);
+                    addActionButtons(messageWrapper, text);
+                    addReactionButtons(messageWrapper);
+                }
+                
+                chatWindow.scrollTop = chatWindow.scrollHeight;
+                
+                // Add notification indicator if chat is closed
+                if (!chatPopup.classList.contains('active') && sender === 'bot') {
+                    toggleBtn.classList.add('new-notification');
+                }
+            };
+
+            const showCodeLoader = () => {
+                const quoteEl = codeLoader.querySelector('.quote');
+                quoteEl.textContent = techQuotes[Math.floor(Math.random() * techQuotes.length)];
+                codeLoader.style.display = 'block';
+                chatWindow.style.display = 'none';
+            };
+
+            const showTypingIndicator = () => {
+                const indicator = document.createElement('div');
+                indicator.id = 'typing-indicator';
+                indicator.className = 'typing-indicator';
+                indicator.innerHTML = `
+                    <div class="typing-dot"></div>
+                    <div class="typing-dot"></div>
+                    <div class="typing-dot"></div>
+                    <span>Elegets AI is typing...</span>
+                `;
+                chatWindow.appendChild(indicator);
+                chatWindow.scrollTop = chatWindow.scrollHeight;
+            };
+            
+            const hideAllLoaders = () => {
+                const indicator = document.getElementById('typing-indicator');
+                if (indicator) indicator.remove();
+                codeLoader.style.display = 'none';
+                chatWindow.style.display = 'block';
+            };
+
+            const addActionButtons = (messageWrapper, text) => {
+                const actionsDiv = document.createElement('div');
+                actionsDiv.className = 'message-actions';
+                
+                const copyBtn = document.createElement('button');
+                copyBtn.className = 'action-btn';
+                copyBtn.innerHTML = '<ion-icon name="copy-outline"></ion-icon>';
+                copyBtn.title = 'Copy text';
+                copyBtn.onclick = () => {
+                    navigator.clipboard.writeText(text);
+                    copyBtn.classList.add('copied');
+                    setTimeout(() => copyBtn.classList.remove('copied'), 1500);
+                };
+                
+                const shareBtn = document.createElement('button');
+                shareBtn.className = 'action-btn';
+                shareBtn.innerHTML = '<ion-icon name="share-social-outline"></ion-icon>';
+                shareBtn.title = 'Share text';
+                shareBtn.onclick = () => {
+                     if (navigator.share) {
+                        navigator.share({ title: 'Elegets AI Response', text: text });
+                    } else {
+                        // Fallback for browsers that don't support Web Share API
+                        navigator.clipboard.writeText(text);
+                        shareBtn.classList.add('copied');
+                        shareBtn.innerHTML = '<ion-icon name="checkmark-outline"></ion-icon>';
+                        setTimeout(() => {
+                            shareBtn.innerHTML = '<ion-icon name="share-social-outline"></ion-icon>';
+                            shareBtn.classList.remove('copied');
+                        }, 1500);
+                    }
+                };
+
+                actionsDiv.appendChild(copyBtn);
+                actionsDiv.appendChild(shareBtn);
+                messageWrapper.appendChild(actionsDiv);
+            };
+
+            const addReactionButtons = (messageWrapper) => {
+                const reactionsDiv = document.createElement('div');
+                reactionsDiv.className = 'message-reactions';
+                
+                const reactions = ['👍', '👎', '😊', '🤔', '🚀'];
+                
+                reactions.forEach(reaction => {
+                    const btn = document.createElement('button');
+                    btn.className = 'reaction-btn';
+                    btn.textContent = reaction;
+                    btn.onclick = () => {
+                        // Toggle active state
+                        btn.classList.toggle('active');
+                        
+                        // Simple analytics - in a real app, you'd send this to your backend
+                        console.log(`User reacted with ${reaction} to message`);
+                    };
+                    reactionsDiv.appendChild(btn);
+                });
+                
+                messageWrapper.appendChild(reactionsDiv);
+            };
+
+            const addResponseSuggestions = () => {
+                const suggestionsDiv = document.createElement('div');
+                suggestionsDiv.className = 'suggestions';
+                
+                // Pick 2 random suggestions
+                const selectedSuggestions = [...quickSuggestions]
+                    .sort(() => 0.5 - Math.random())
+                    .slice(0, 2);
+                
+                selectedSuggestions.forEach(suggestion => {
+                    const btn = document.createElement('button');
+                    btn.className = 'suggestion-btn';
+                    btn.textContent = suggestion;
+                    btn.onclick = () => {
+                        chatInput.value = suggestion;
+                        sendMessage();
+                    };
+                    suggestionsDiv.appendChild(btn);
+                });
+                
+                chatWindow.appendChild(suggestionsDiv);
+                chatWindow.scrollTop = chatWindow.scrollHeight;
+            };
+
+            const addCodeCopyButtons = (parentElement) => {
+                parentElement.querySelectorAll('pre').forEach(block => {
+                    const button = document.createElement('button');
+                    button.className = 'copy-code-btn';
+                    button.innerHTML = '<ion-icon name="copy-outline"></ion-icon> Copy';
+                    block.appendChild(button);
+                    button.onclick = () => {
+                        const code = block.querySelector('code') ? block.querySelector('code').innerText : block.innerText;
+                        navigator.clipboard.writeText(code);
+                        button.innerHTML = '<ion-icon name="checkmark-outline"></ion-icon> Copied';
+                        button.classList.add('copied');
+                        setTimeout(() => {
+                            button.innerHTML = '<ion-icon name="copy-outline"></ion-icon> Copy';
+                            button.classList.remove('copied');
+                        }, 2000);
+                    };
+                });
+            };
+
+            sendBtn.addEventListener('click', sendMessage);
+            chatInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter' && !e.shiftKey) {
+                    e.preventDefault();
+                    sendMessage();
+                }
+            });
+
+            // Auto-focus input when chat is opened
+            chatPopup.addEventListener('transitionend', () => {
+                if (chatPopup.classList.contains('active')) {
+                    chatInput.focus();
+                }
+            });
+
+            // Welcome message already added in HTML
+        });
+        // --- END: ADVANCED CHATBOT WIDGET JAVASCRIPT ---
+    </script>
+</body>
+</html>
