@@ -1,0 +1,813 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Elegets AI | Advanced Chat Interface</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/atom-one-dark.min.css">
+    <style>
+        :root {
+            --primary: #0D253F;
+            --primary-light: #2A4A6E;
+            --primary-dark: #071729;
+            --secondary: #01B4E4;
+            --accent: #F4A261;
+            --dark: #121212;
+            --light: #F8F9FA;
+            --gray: #6c757d;
+            --white: #ffffff;
+            --shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #0D253F 0%, #071729 100%);
+            color: var(--light);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .chat-container {
+            width: 100%;
+            max-width: 1000px;
+            height: 90vh;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+        }
+
+        .chat-header {
+            padding: 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(13, 37, 63, 0.5);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .logo-icon {
+            color: var(--secondary);
+            font-size: 1.8rem;
+        }
+
+        .status {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.9rem;
+            color: var(--gray);
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #10B981;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .message {
+            display: flex;
+            gap: 12px;
+            max-width: 85%;
+            animation: messageAppear 0.4s ease-out;
+        }
+
+        @keyframes messageAppear {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .message.user {
+            align-self: flex-end;
+            flex-direction: row-reverse;
+        }
+
+        .avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            font-size: 1rem;
+        }
+
+        .user .avatar {
+            background: var(--secondary);
+            color: var(--primary-dark);
+        }
+
+        .assistant .avatar {
+            background: var(--accent);
+            color: var(--primary-dark);
+        }
+
+        .message-content {
+            background: rgba(255, 255, 255, 0.08);
+            padding: 15px 18px;
+            border-radius: 18px;
+            border-bottom-left-radius: 5px;
+            line-height: 1.5;
+            flex: 1;
+        }
+
+        .user .message-content {
+            background: rgba(1, 180, 228, 0.2);
+            border-bottom-left-radius: 18px;
+            border-bottom-right-radius: 5px;
+        }
+
+        .message-text {
+            word-wrap: break-word;
+        }
+
+        /* Enhanced Code Block Styling */
+        .message-text pre {
+            margin: 15px 0;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            position: relative;
+        }
+
+        .message-text pre code {
+            font-family: 'Fira Code', monospace;
+            font-size: 0.9rem;
+            line-height: 1.5;
+            padding: 20px !important;
+            display: block;
+            overflow-x: auto;
+        }
+
+        .code-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #1a1a1a;
+            padding: 10px 15px;
+            border-bottom: 1px solid #333;
+            font-size: 0.8rem;
+            color: #aaa;
+        }
+
+        .code-language {
+            font-weight: 600;
+            color: var(--secondary);
+        }
+
+        .code-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .copy-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            color: var(--light);
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .copy-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .copy-btn.copied {
+            background: var(--accent);
+            color: var(--primary-dark);
+        }
+
+        .message-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 12px;
+            opacity: 0;
+            transition: var(--transition);
+        }
+
+        .message:hover .message-actions {
+            opacity: 1;
+        }
+
+        .action-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            color: var(--gray);
+            padding: 6px 12px;
+            border-radius: 16px;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .action-btn:hover {
+            background: var(--secondary);
+            color: var(--primary-dark);
+        }
+
+        .action-btn.copied {
+            background: var(--accent);
+            color: var(--primary-dark);
+        }
+
+        .typing-indicator {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+            margin-top: 10px;
+        }
+
+        .typing-dots {
+            display: flex;
+            gap: 5px;
+        }
+
+        .typing-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--secondary);
+            animation: typing 1.4s infinite ease-in-out;
+        }
+
+        .typing-dot:nth-child(1) {
+            animation-delay: -0.32s;
+        }
+
+        .typing-dot:nth-child(2) {
+            animation-delay: -0.16s;
+        }
+
+        @keyframes typing {
+            0%, 80%, 100% {
+                transform: scale(0.8);
+                opacity: 0.5;
+            }
+            40% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        .chat-input-area {
+            padding: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            gap: 12px;
+        }
+
+        .input-wrapper {
+            flex: 1;
+            position: relative;
+        }
+
+        .chat-input {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 15px 50px 15px 20px;
+            color: var(--light);
+            font-size: 1rem;
+            resize: none;
+            max-height: 120px;
+            transition: var(--transition);
+        }
+
+        .chat-input:focus {
+            outline: none;
+            border-color: var(--secondary);
+            box-shadow: 0 0 0 2px rgba(1, 180, 228, 0.2);
+        }
+
+        .input-actions {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            display: flex;
+            gap: 10px;
+        }
+
+        .input-action {
+            background: none;
+            border: none;
+            color: var(--gray);
+            cursor: pointer;
+            transition: var(--transition);
+            font-size: 1.1rem;
+        }
+
+        .input-action:hover {
+            color: var(--light);
+        }
+
+        .send-btn {
+            background: var(--secondary);
+            color: var(--primary-dark);
+            border: none;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: var(--transition);
+            flex-shrink: 0;
+        }
+
+        .send-btn:hover {
+            background: #00a0cc;
+            transform: translateY(-2px);
+        }
+
+        .send-btn:disabled {
+            background: var(--gray);
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .welcome-message {
+            text-align: center;
+            padding: 40px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .welcome-icon {
+            font-size: 3rem;
+            color: var(--secondary);
+        }
+
+        .welcome-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+        }
+
+        .welcome-subtitle {
+            font-size: 1rem;
+            color: var(--gray);
+            max-width: 500px;
+        }
+
+        .capabilities {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            width: 100%;
+            max-width: 600px;
+            margin-top: 20px;
+        }
+
+        .capability {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            padding: 15px;
+            text-align: center;
+            transition: var(--transition);
+        }
+
+        .capability:hover {
+            background: rgba(255, 255, 255, 0.08);
+            transform: translateY(-5px);
+        }
+
+        .capability-icon {
+            font-size: 1.5rem;
+            color: var(--secondary);
+            margin-bottom: 10px;
+        }
+
+        .capability-title {
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        /* Scrollbar Styling */
+        .chat-messages::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .chat-messages::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .chat-messages::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 3px;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .chat-container {
+                height: 95vh;
+                border-radius: 15px;
+            }
+            
+            .message {
+                max-width: 90%;
+            }
+            
+            .capabilities {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chat-container">
+        <div class="chat-header">
+            <div class="logo">
+                <i class="fas fa-brain logo-icon"></i>
+                <span>Elegets AI</span>
+            </div>
+            <div class="status">
+                <div class="status-dot"></div>
+                <span>Online</span>
+            </div>
+        </div>
+
+        <div class="chat-messages" id="chat-messages">
+            <div class="welcome-message">
+                <i class="fas fa-robot welcome-icon"></i>
+                <h1 class="welcome-title">Hello! I'm Elegets AI</h1>
+                <p class="welcome-subtitle">Your advanced assistant for electronics, IoT, embedded systems, and programming. How can I help you today?</p>
+                
+                <div class="capabilities">
+                    <div class="capability">
+                        <i class="fas fa-microchip capability-icon"></i>
+                        <div class="capability-title">Electronics Design</div>
+                    </div>
+                    <div class="capability">
+                        <i class="fas fa-satellite-dish capability-icon"></i>
+                        <div class="capability-title">IoT Solutions</div>
+                    </div>
+                    <div class="capability">
+                        <i class="fas fa-code capability-icon"></i>
+                        <div class="capability-title">Programming</div>
+                    </div>
+                    <div class="capability">
+                        <i class="fas fa-lightbulb capability-icon"></i>
+                        <div class="capability-title">Problem Solving</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="chat-input-area">
+            <div class="input-wrapper">
+                <textarea class="chat-input" id="chat-input" placeholder="Ask me anything about electronics, IoT, or programming..." rows="1"></textarea>
+                <div class="input-actions">
+                    <button class="input-action" title="Attach File">
+                        <i class="fas fa-paperclip"></i>
+                    </button>
+                    <button class="input-action" title="Voice Input">
+                        <i class="fas fa-microphone"></i>
+                    </button>
+                </div>
+            </div>
+            <button class="send-btn" id="send-btn">
+                <i class="fas fa-paper-plane"></i>
+            </button>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const BACKEND_URL = 'https://elegets-chatbot1.vercel.app/'; // Your backend URL
+            
+            // DOM Elements
+            const chatMessages = document.getElementById('chat-messages');
+            const chatInput = document.getElementById('chat-input');
+            const sendBtn = document.getElementById('send-btn');
+            const welcomeMessage = document.querySelector('.welcome-message');
+            
+            // Initialize Highlight.js
+            hljs.configure({
+                languages: ['javascript', 'python', 'cpp', 'c', 'java', 'html', 'css', 'arduino']
+            });
+            
+            // Auto-resize textarea
+            chatInput.addEventListener('input', function() {
+                this.style.height = 'auto';
+                this.style.height = (this.scrollHeight) + 'px';
+            });
+            
+            // Send message function
+            async function sendMessage() {
+                const messageText = chatInput.value.trim();
+                if (!messageText) return;
+                
+                // Hide welcome message if it's the first user message
+                if (welcomeMessage && chatMessages.querySelectorAll('.message.user').length === 0) {
+                    welcomeMessage.style.display = 'none';
+                }
+                
+                // Add user message to chat
+                addMessage('user', messageText);
+                chatInput.value = '';
+                chatInput.style.height = 'auto';
+                
+                // Show typing indicator
+                showTypingIndicator();
+                
+                // Disable send button while processing
+                sendBtn.disabled = true;
+                
+                try {
+                    // Send request to backend
+                    const response = await fetch(BACKEND_URL, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            message: messageText
+                        })
+                    });
+                    
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    
+                    const data = await response.json();
+                    
+                    // Hide typing indicator
+                    hideTypingIndicator();
+                    
+                    // Add bot response to chat
+                    addMessage('assistant', data.reply, true);
+                    
+                } catch (error) {
+                    console.error('Error sending message:', error);
+                    hideTypingIndicator();
+                    addMessage('assistant', 'Sorry, I encountered an error. Please try again later.');
+                } finally {
+                    sendBtn.disabled = false;
+                    chatInput.focus();
+                }
+            }
+            
+            // Add message to chat
+            function addMessage(sender, text, isMarkdown = false) {
+                const messageDiv = document.createElement('div');
+                messageDiv.className = `message ${sender}`;
+                
+                const avatarDiv = document.createElement('div');
+                avatarDiv.className = 'avatar';
+                avatarDiv.innerHTML = sender === 'user' ? 
+                    '<i class="fas fa-user"></i>' : 
+                    '<i class="fas fa-robot"></i>';
+                
+                const contentDiv = document.createElement('div');
+                contentDiv.className = 'message-content';
+                
+                const textDiv = document.createElement('div');
+                textDiv.className = 'message-text';
+                
+                // Process markdown and code blocks
+                if (isMarkdown) {
+                    // Enhanced code block processing
+                    let formattedText = text.replace(/```(\w+)?\n([\s\S]*?)```/g, function(match, language, code) {
+                        const lang = language || 'text';
+                        const highlightedCode = hljs.highlight(code.trim(), { language: lang }).value;
+                        return `
+                            <div class="code-block">
+                                <div class="code-header">
+                                    <span class="code-language">${lang.toUpperCase()}</span>
+                                    <div class="code-actions">
+                                        <button class="copy-btn" data-code="${escapeHtml(code.trim())}">
+                                            <i class="fas fa-copy"></i> Copy
+                                        </button>
+                                    </div>
+                                </div>
+                                <pre><code class="hljs language-${lang}">${highlightedCode}</code></pre>
+                            </div>
+                        `;
+                    });
+                    
+                    // Convert `inline code` to code elements
+                    formattedText = formattedText.replace(/`([^`]+)`/g, '<code class="inline-code">$1</code>');
+                    
+                    // Convert line breaks to paragraphs
+                    formattedText = formattedText.replace(/\n\n/g, '</p><p>');
+                    formattedText = formattedText.replace(/\n/g, '<br>');
+                    formattedText = '<p>' + formattedText + '</p>';
+                    
+                    textDiv.innerHTML = formattedText;
+                } else {
+                    textDiv.textContent = text;
+                }
+                
+                contentDiv.appendChild(textDiv);
+                
+                // Add action buttons for bot messages
+                if (sender === 'assistant') {
+                    const actionsDiv = document.createElement('div');
+                    actionsDiv.className = 'message-actions';
+                    
+                    const copyBtn = document.createElement('button');
+                    copyBtn.className = 'action-btn';
+                    copyBtn.innerHTML = '<i class="fas fa-copy"></i> Copy';
+                    copyBtn.onclick = function() {
+                        navigator.clipboard.writeText(text).then(() => {
+                            copyBtn.innerHTML = '<i class="fas fa-check"></i> Copied!';
+                            copyBtn.classList.add('copied');
+                            setTimeout(() => {
+                                copyBtn.innerHTML = '<i class="fas fa-copy"></i> Copy';
+                                copyBtn.classList.remove('copied');
+                            }, 2000);
+                        });
+                    };
+                    
+                    const shareBtn = document.createElement('button');
+                    shareBtn.className = 'action-btn';
+                    shareBtn.innerHTML = '<i class="fas fa-share-alt"></i> Share';
+                    shareBtn.onclick = function() {
+                        if (navigator.share) {
+                            navigator.share({
+                                title: 'Elegets AI Response',
+                                text: text
+                            });
+                        } else {
+                            // Fallback for browsers that don't support Web Share API
+                            navigator.clipboard.writeText(text).then(() => {
+                                shareBtn.innerHTML = '<i class="fas fa-check"></i> Copied!';
+                                shareBtn.classList.add('copied');
+                                setTimeout(() => {
+                                    shareBtn.innerHTML = '<i class="fas fa-share-alt"></i> Share';
+                                    shareBtn.classList.remove('copied');
+                                }, 2000);
+                            });
+                        }
+                    };
+                    
+                    actionsDiv.appendChild(copyBtn);
+                    actionsDiv.appendChild(shareBtn);
+                    contentDiv.appendChild(actionsDiv);
+                    
+                    // Add copy functionality to code blocks
+                    addCodeCopyButtons(textDiv);
+                }
+                
+                messageDiv.appendChild(avatarDiv);
+                messageDiv.appendChild(contentDiv);
+                
+                chatMessages.appendChild(messageDiv);
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            }
+            
+            // Show typing indicator
+            function showTypingIndicator() {
+                const typingDiv = document.createElement('div');
+                typingDiv.className = 'message assistant';
+                typingDiv.id = 'typing-indicator';
+                
+                const avatarDiv = document.createElement('div');
+                avatarDiv.className = 'avatar';
+                avatarDiv.innerHTML = '<i class="fas fa-robot"></i>';
+                
+                const contentDiv = document.createElement('div');
+                contentDiv.className = 'message-content';
+                
+                const typingIndicator = document.createElement('div');
+                typingIndicator.className = 'typing-indicator';
+                typingIndicator.innerHTML = `
+                    <div class="typing-dots">
+                        <div class="typing-dot"></div>
+                        <div class="typing-dot"></div>
+                        <div class="typing-dot"></div>
+                    </div>
+                    <span>Elegets AI is thinking...</span>
+                `;
+                
+                contentDiv.appendChild(typingIndicator);
+                typingDiv.appendChild(avatarDiv);
+                typingDiv.appendChild(contentDiv);
+                
+                chatMessages.appendChild(typingDiv);
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            }
+            
+            // Hide typing indicator
+            function hideTypingIndicator() {
+                const typingIndicator = document.getElementById('typing-indicator');
+                if (typingIndicator) {
+                    typingIndicator.remove();
+                }
+            }
+            
+            // Add copy buttons to code blocks
+            function addCodeCopyButtons(parentElement) {
+                const codeBlocks = parentElement.querySelectorAll('.code-block');
+                codeBlocks.forEach(block => {
+                    const copyButton = block.querySelector('.copy-btn');
+                    const codeContent = copyButton.getAttribute('data-code');
+                    
+                    copyButton.addEventListener('click', function() {
+                        navigator.clipboard.writeText(codeContent).then(() => {
+                            copyButton.innerHTML = '<i class="fas fa-check"></i> Copied!';
+                            copyButton.classList.add('copied');
+                            setTimeout(() => {
+                                copyButton.innerHTML = '<i class="fas fa-copy"></i> Copy';
+                                copyButton.classList.remove('copied');
+                            }, 2000);
+                        });
+                    });
+                });
+            }
+            
+            // Utility function to escape HTML
+            function escapeHtml(unsafe) {
+                return unsafe
+                    .replace(/&/g, "&amp;")
+                    .replace(/</g, "&lt;")
+                    .replace(/>/g, "&gt;")
+                    .replace(/"/g, "&quot;")
+                    .replace(/'/g, "&#039;");
+            }
+            
+            // Event listeners
+            sendBtn.addEventListener('click', sendMessage);
+            
+            chatInput.addEventListener('keydown', function(e) {
+                if (e.key === 'Enter' && !e.shiftKey) {
+                    e.preventDefault();
+                    sendMessage();
+                }
+            });
+            
+            // Focus input on load
+            chatInput.focus();
+            
+            // Add sample conversation for demonstration
+            setTimeout(() => {
+                if (welcomeMessage.style.display !== 'none') {
+                    addMessage('assistant', 'Hello! I can help you with:\n\n- **Electronics Design**: Circuit design, PCB layout, component selection\n- **IoT Solutions**: Sensor integration, wireless communication, cloud connectivity\n- **Programming**: Embedded C, Python, Arduino, ESP32\n- **Problem Solving**: Debugging, optimization, technical solutions\n\nWhat would you like to work on today?', true);
+                }
+            }, 1000);
+        });
+    </script>
+</body>
+</html>
