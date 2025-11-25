@@ -1,0 +1,786 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Elegets AI | Workspace</title>
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="icon" href="elegets-logo-cut.png" type="image/png">
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/tokyo-night-dark.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+
+    <style>
+        :root {
+            /* Theme Variables */
+            --bg-body: #131314;
+            --bg-sidebar: #1e1f20;
+            --bg-input: #1e1f20;
+            --text-primary: #e3e3e3;
+            --text-secondary: #a8c7fa;
+            --accent: #a8c7fa; 
+            --user-bubble: #282a2c;
+            --border: #444746;
+            --max-width: 800px;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background-color: var(--bg-body);
+            color: var(--text-primary);
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            height: 100dvh;
+            display: flex;
+            overflow: hidden;
+        }
+
+        /* --- SIDEBAR --- */
+        .sidebar {
+            width: 280px;
+            background: var(--bg-sidebar);
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
+            position: fixed;
+            height: 100%;
+            z-index: 1000;
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            transform: translateX(0);
+            border-right: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .sidebar-header {
+            margin-bottom: 30px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 0 5px;
+        }
+
+        .brand-logo {
+            height: 42px; 
+            width: auto;
+            border-radius: 8px;
+        }
+
+        .brand-text {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 1.4rem;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            color: #ffffff;
+            background: linear-gradient(120deg, #ffffff, #a8c7fa);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .new-chat-btn {
+            background: #37393b;
+            color: var(--text-primary);
+            border: none;
+            padding: 12px 16px;
+            border-radius: 12px;
+            font-weight: 500;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: background 0.2s;
+        }
+        .new-chat-btn:hover { background: #444746; }
+
+        /* Overlay */
+        .sidebar-overlay {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 999;
+            display: none;
+            backdrop-filter: blur(4px);
+        }
+        .sidebar-overlay.active { display: block; }
+
+        /* --- MAIN CONTENT --- */
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            margin-left: 280px;
+            position: relative;
+            width: calc(100% - 280px);
+        }
+
+        /* Mobile Header */
+        .mobile-header {
+            display: none;
+            padding: 12px 20px;
+            background: var(--bg-body);
+            align-items: center;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            z-index: 50;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .mobile-brand-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .mobile-brand-text {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #fff;
+            letter-spacing: -0.3px;
+        }
+
+        /* --- CHAT AREA --- */
+        .chat-scroll-area {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
+            padding-bottom: 160px;
+            scroll-behavior: smooth;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .chat-width-limiter {
+            width: 100%;
+            max-width: var(--max-width);
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+
+        /* --- MESSAGES --- */
+        .message-wrapper.user {
+            align-self: flex-end;
+            max-width: 80%;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+        }
+
+        .user-bubble {
+            background: var(--user-bubble);
+            padding: 12px 18px;
+            border-radius: 18px;
+            border-top-right-radius: 4px;
+            color: var(--text-primary);
+            line-height: 1.6;
+            font-size: 0.95rem;
+        }
+
+        .message-wrapper.bot {
+            align-self: flex-start;
+            width: 100%;
+            display: flex;
+            gap: 16px;
+            margin-top: 10px;
+        }
+
+        .bot-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #4285f4, #a8c7fa);
+            color: #000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            font-size: 1rem;
+            overflow: hidden;
+        }
+
+        .bot-content {
+            flex: 1;
+            min-width: 0;
+            line-height: 1.7;
+            font-size: 1rem;
+            color: #e3e3e3;
+        }
+
+        /* Markdown Styles */
+        .bot-content h1, .bot-content h2 { margin: 20px 0 10px; color: #fff; font-weight: 600; }
+        .bot-content h2 { font-size: 1.4rem; }
+        .bot-content h3 { font-size: 1.1rem; color: var(--accent); margin-top: 20px; }
+        .bot-content p { margin-bottom: 12px; }
+        .bot-content strong { color: var(--accent); font-weight: 600; }
+        .bot-content ul, .bot-content ol { margin-left: 20px; margin-bottom: 15px; color: #c4c7c5; }
+        .bot-content li { margin-bottom: 6px; }
+
+        /* Code Editor */
+        .code-block-wrapper {
+            margin: 15px 0;
+            border-radius: 8px;
+            border: 1px solid #444746;
+            background: #1e1f20;
+            overflow: hidden;
+        }
+
+        .code-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 12px;
+            background: #2b2d30;
+            border-bottom: 1px solid #444746;
+        }
+
+        .code-lang { font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; color: #a8c7fa; text-transform: uppercase; }
+        
+        .code-copy-btn {
+            background: transparent;
+            border: none;
+            color: #c4c7c5;
+            font-size: 0.8rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            padding: 4px 8px;
+            border-radius: 4px;
+        }
+        .code-copy-btn:hover { background: rgba(255,255,255,0.1); color: #fff; }
+
+        pre { margin: 0; padding: 15px; overflow-x: auto; }
+        code { font-family: 'JetBrains Mono', monospace; font-size: 0.9rem; }
+
+        /* Action Bar */
+        .bot-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+            padding-top: 10px;
+        }
+
+        .action-icon-btn {
+            background: transparent;
+            border: 1px solid transparent;
+            color: #c4c7c5;
+            padding: 6px 10px;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.2s;
+        }
+        .action-icon-btn:hover { background: rgba(255,255,255,0.08); color: var(--accent); }
+
+        /* --- INPUT AREA --- */
+        .input-container {
+            position: fixed;
+            bottom: 0;
+            left: 280px;
+            right: 0;
+            background: var(--bg-body);
+            padding: 15px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            z-index: 50;
+        }
+
+        .input-wrapper {
+            width: 100%;
+            max-width: var(--max-width);
+            background: var(--bg-input);
+            border-radius: 30px;
+            padding: 10px 20px;
+            display: flex;
+            align-items: flex-end;
+            border: 1px solid transparent;
+            transition: border 0.2s;
+        }
+
+        .input-wrapper:focus-within { border-color: rgba(255,255,255,0.2); background: #282a2c; }
+
+        textarea {
+            flex: 1;
+            background: transparent;
+            border: none;
+            color: #fff;
+            resize: none;
+            font-size: 1rem;
+            max-height: 150px;
+            padding: 12px 0;
+            outline: none;
+            line-height: 1.5;
+        }
+
+        .send-btn {
+            width: 40px;
+            height: 40px;
+            background: var(--accent);
+            color: #000;
+            border: none;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            flex-shrink: 0;
+            margin-bottom: 4px;
+            margin-left: 10px;
+            transition: transform 0.2s;
+        }
+        .send-btn:hover { transform: scale(1.05); }
+
+        .disclaimer {
+            margin-top: 10px;
+            font-size: 0.75rem;
+            color: #c4c7c5;
+            text-align: center;
+            font-weight: 400;
+            opacity: 0.7;
+        }
+
+        /* ================= POPUP STYLES ================= */
+        .popup-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(4px);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999; /* Higher than sidebar */
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease;
+        }
+
+        .popup-box {
+            background-color: #1e1f20;
+            width: 90%;
+            max-width: 450px;
+            border-radius: 28px;
+            overflow: hidden;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            text-align: left;
+            color: #e3e3e3;
+        }
+
+        .popup-image-container {
+            width: 100%;
+            height: 200px;
+            background: radial-gradient(circle at center, #424242 0%, #1e1f20 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .popup-image-placeholder {
+            font-size: 70px;
+            background: linear-gradient(45deg, #4facfe, #00f2fe, #ff0080);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .popup-content {
+            padding: 24px;
+        }
+
+        .popup-content h2 {
+            margin: 0 0 10px 0;
+            font-size: 24px;
+            font-weight: 600;
+            color: #ffffff;
+        }
+
+        .popup-content p {
+            font-size: 15px;
+            line-height: 1.5;
+            color: #c4c7c5;
+            margin-bottom: 20px;
+        }
+
+        .popup-content ul {
+            list-style-type: none;
+            padding: 0;
+            margin-bottom: 30px;
+        }
+
+        .popup-content ul li {
+            position: relative;
+            padding-left: 20px;
+            margin-bottom: 8px;
+            font-size: 14px;
+            color: #e3e3e3;
+        }
+
+        .popup-content ul li::before {
+            content: "•";
+            position: absolute;
+            left: 0;
+            color: #e3e3e3;
+        }
+
+        .popup-buttons {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            padding-top: 10px;
+        }
+
+        .btn {
+            border: none;
+            padding: 10px 24px;
+            border-radius: 50px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.1s;
+        }
+
+        .btn:active { transform: scale(0.98); }
+
+        .btn-cancel {
+            background: transparent;
+            color: #a8c7fa;
+        }
+        
+        .btn-cancel:hover { background: rgba(168, 199, 250, 0.08); }
+
+        .btn-primary {
+            background-color: #a8c7fa;
+            color: #062e6f;
+        }
+        
+        .btn-primary:hover { background-color: #8ab4f8; }
+
+        .show-popup {
+            opacity: 1;
+            visibility: visible;
+        }
+        /* ================= END POPUP STYLES ================= */
+
+        /* --- MOBILE RESPONSIVE --- */
+        @media (max-width: 768px) {
+            .sidebar { transform: translateX(-100%); }
+            .sidebar.active { transform: translateX(0); }
+            .main-content { margin-left: 0; width: 100%; }
+            .mobile-header { display: flex; }
+            .input-container { left: 0; padding: 10px 15px; }
+            .message-wrapper.user { max-width: 90%; }
+            .code-block-wrapper { max-width: 100%; width: 100%; }
+            pre { white-space: pre; }
+            .disclaimer { font-size: 0.7rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="sidebar-overlay" id="sidebar-overlay" onclick="toggleSidebar()"></div>
+
+    <div class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <img src="elegets-logo-cut.png" alt="Elegets AI" class="brand-logo">
+            <span class="brand-text">Elegets AI</span>
+        </div>
+        
+        <button class="new-chat-btn" onclick="resetChat()">
+            <i class="fas fa-plus"></i> New Chat
+        </button>
+    </div>
+
+    <div class="main-content">
+        
+        <div class="mobile-header">
+            <div class="mobile-brand-container">
+                <img src="elegets-logo-cut.png" alt="Elegets" class="brand-logo" style="height: 32px;">
+                <span class="mobile-brand-text">Elegets AI</span>
+            </div>
+            <button onclick="toggleSidebar()" style="background:none; border:none; color:#e3e3e3; font-size:1.2rem;">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+
+        <div class="chat-scroll-area" id="chat-scroll-area">
+            <div class="chat-width-limiter" id="chat-container">
+            </div>
+        </div>
+
+        <div class="input-container">
+            <div class="input-wrapper">
+                <textarea id="user-input" rows="1" placeholder="Ask a question..."></textarea>
+                <button class="send-btn" id="send-btn"><i class="fas fa-arrow-up"></i></button>
+            </div>
+            <div class="disclaimer">
+                Elegets AI can make mistakes. Please double-check important information.
+            </div>
+        </div>
+    </div>
+
+    <div id="elegetsPopup" class="popup-overlay">
+        <div class="popup-box">
+            <div class="popup-image-container">
+                <span class="popup-image-placeholder">✨ Elegets AI</span>
+            </div>
+            
+            <div class="popup-content">
+                <h2>Elegets AI 1.0 is here</h2>
+                <p>It's our smartest model yet—more powerful and helpful for whatever you need:</p>
+                
+                <ul>
+                    <li>Expert coding & project help</li>
+                    <li>Next-level research intelligence</li>
+                    <li>Deeper understanding for electronics</li>
+                </ul>
+
+                <div class="popup-buttons">
+                    <!-- <button class="btn btn-cancel" onclick="closePopup()">No thanks</button> -->
+                    <button class="btn btn-primary" onclick="closePopup()">Try it</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        const BACKEND_URL = 'https://elegets-chatbot1.vercel.app/';
+        
+        // --- INITIALIZATION & HISTORY ---
+        // Try to load history from LocalStorage so refresh doesn't kill context
+        let conversationHistory = JSON.parse(localStorage.getItem('elegetsHistory')) || [
+            {
+                role: "system",
+                content: "You are Elegets AI, an expert assistant for Electronics, IoT, Arduino, ESP32. Always remember the previous code and context provided in this conversation."
+            }
+        ];
+        
+        const messageStore = {}; 
+
+        // --- MARKED CONFIG ---
+        const renderer = new marked.Renderer();
+        renderer.code = function({ text, lang }) {
+            const code = text || "";
+            const language = lang || "text";
+            const id = 'code-' + Math.random().toString(36).substr(2, 9);
+            messageStore[id] = code;
+            
+            return `
+            <div class="code-block-wrapper">
+                <div class="code-header">
+                    <span class="code-lang">${language}</span>
+                    <button class="code-copy-btn" onclick="copyFromStore('${id}')">
+                        <i class="fas fa-copy"></i> Copy
+                    </button>
+                </div>
+                <pre><code class="hljs language-${language}">${code}</code></pre>
+            </div>`;
+        };
+        marked.use({ renderer });
+
+        // --- APP LOGIC ---
+        document.addEventListener('DOMContentLoaded', () => {
+            const input = document.getElementById('user-input');
+            const btn = document.getElementById('send-btn');
+            const container = document.getElementById('chat-container');
+            const scrollArea = document.getElementById('chat-scroll-area');
+
+            // --- POPUP TRIGGER ---
+            // Triggers 0.5 seconds after page loads
+            setTimeout(function() {
+                const popup = document.getElementById('elegetsPopup');
+                if(popup) popup.classList.add('show-popup');
+            }, 500);
+            // ---------------------
+
+            // Restore previous chat from LocalStorage if it exists
+            renderHistoryFromStorage();
+
+            // Auto-Resize Input
+            input.addEventListener('input', function() {
+                this.style.height = 'auto';
+                this.style.height = Math.min(this.scrollHeight, 150) + 'px';
+            });
+
+            async function sendMessage() {
+                const text = input.value.trim();
+                if (!text) return;
+
+                // 1. Render User Message
+                renderMessage('user', text);
+                
+                // 2. Update History & Storage
+                conversationHistory.push({ role: "user", content: text });
+                localStorage.setItem('elegetsHistory', JSON.stringify(conversationHistory));
+
+                input.value = '';
+                input.style.height = 'auto';
+                scrollToBottom();
+
+                // 3. Show Loading
+                const loadingId = showLoading();
+
+                try {
+                    console.log("Sending to backend:", conversationHistory); // Debugging
+
+                    const response = await fetch(BACKEND_URL, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ 
+                            message: text, 
+                            history: conversationHistory // Sending FULL history
+                        })
+                    });
+                    
+                    if (!response.ok) throw new Error("Backend Error");
+
+                    const data = await response.json();
+                    document.getElementById(loadingId).remove();
+                    
+                    // 4. Render Bot Reply
+                    renderMessage('bot', data.reply);
+                    
+                    // 5. Update History with Bot Reply
+                    conversationHistory.push({ role: "assistant", content: data.reply });
+                    localStorage.setItem('elegetsHistory', JSON.stringify(conversationHistory));
+
+                } catch (error) {
+                    console.error(error);
+                    if(document.getElementById(loadingId)) document.getElementById(loadingId).remove();
+                    renderMessage('bot', "**Connection Error:** I could not reach the server. Please check your internet or the backend URL.");
+                    
+                    // Remove the user message from history so they can try again cleanly
+                    conversationHistory.pop(); 
+                    localStorage.setItem('elegetsHistory', JSON.stringify(conversationHistory));
+                }
+            }
+
+            function renderMessage(role, text) {
+                const div = document.createElement('div');
+                div.className = `message-wrapper ${role}`;
+                
+                if (role === 'user') {
+                    div.innerHTML = `<div class="user-bubble">${escapeHtml(text)}</div>`;
+                } else {
+                    const msgId = 'bot-' + Date.now() + Math.random();
+                    messageStore[msgId] = text; 
+                    
+                    div.innerHTML = `
+                        <div class="bot-avatar"><i class="fas fa-robot"></i></div>
+                        <div class="bot-content">
+                            ${marked.parse(text)}
+                            <div class="bot-actions">
+                                <button class="action-icon-btn" onclick="copyFromStore('${msgId}')">
+                                    <i class="fas fa-copy"></i> Copy
+                                </button>
+                                <button class="action-icon-btn" onclick="shareFromStore('${msgId}')">
+                                    <i class="fas fa-share-alt"></i> Share
+                                </button>
+                            </div>
+                        </div>
+                    `;
+                }
+                
+                container.appendChild(div);
+                if (role === 'bot') {
+                    div.querySelectorAll('pre code').forEach(el => hljs.highlightElement(el));
+                }
+                scrollToBottom();
+            }
+
+            function renderHistoryFromStorage() {
+                // Skip the first 'system' message when rendering to UI
+                if (conversationHistory.length <= 1) {
+                    // Show welcome if history is empty
+                    renderMessage('bot', "**Hello! I'm Elegets AI.**\n\nI can help you with code, circuit diagrams, and IoT logic. How can I assist you today?");
+                    return;
+                }
+
+                conversationHistory.forEach(msg => {
+                    if (msg.role === 'user') renderMessage('user', msg.content);
+                    if (msg.role === 'assistant') renderMessage('bot', msg.content);
+                });
+            }
+
+            function showLoading() {
+                const id = 'loading-' + Date.now();
+                const div = document.createElement('div');
+                div.id = id;
+                div.className = 'message-wrapper bot';
+                div.innerHTML = `
+                    <div class="bot-avatar"><i class="fas fa-robot"></i></div>
+                    <div class="bot-content" style="color:#a8c7fa">Thinking...</div>
+                `;
+                container.appendChild(div);
+                scrollToBottom();
+                return id;
+            }
+
+            function scrollToBottom() {
+                scrollArea.scrollTop = scrollArea.scrollHeight;
+            }
+
+            // Events
+            btn.addEventListener('click', sendMessage);
+            input.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' && !e.shiftKey) {
+                    e.preventDefault();
+                    sendMessage();
+                }
+            });
+        });
+
+        // --- UTILITIES ---
+        window.copyFromStore = function(id) {
+            const text = messageStore[id];
+            if(text) {
+                navigator.clipboard.writeText(text);
+                alert("Copied!");
+            }
+        }
+
+        window.shareFromStore = function(id) {
+            const text = messageStore[id];
+            if(navigator.share && text) {
+                navigator.share({ title: 'Elegets AI', text: text });
+            } else {
+                window.copyFromStore(id);
+            }
+        }
+
+        function toggleSidebar() {
+            document.getElementById('sidebar').classList.toggle('active');
+            document.getElementById('sidebar-overlay').classList.toggle('active');
+        }
+
+        function resetChat() {
+            localStorage.removeItem('elegetsHistory');
+            conversationHistory = [
+                {
+                    role: "system",
+                    content: "You are Elegets AI, an expert assistant for Electronics, IoT, Arduino, ESP32. Always remember the previous code and context provided in this conversation."
+                }
+            ];
+            document.getElementById('chat-container').innerHTML = '';
+            if(window.innerWidth < 768) toggleSidebar();
+            location.reload();
+        }
+
+        function escapeHtml(text) {
+            return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+        }
+
+        // --- POPUP FUNCTION ---
+        function closePopup() {
+            document.getElementById('elegetsPopup').classList.remove('show-popup');
+        }
+    </script>
+</body>
+</html>
