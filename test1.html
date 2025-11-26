@@ -6,11 +6,16 @@
     <title>Elegets AI | Workspace</title>
     
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="icon" href="elegets-logo-cut.png" type="image/png">
     
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/tokyo-night-dark.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
 
     <style>
         :root {
@@ -52,19 +57,29 @@
             border-right: 1px solid rgba(255,255,255,0.1);
         }
 
-        /* Logo Styling */
         .sidebar-header {
-            margin-bottom: 25px;
+            margin-bottom: 30px;
             display: flex;
             align-items: center;
-            justify-content: center; /* Center logo in sidebar */
+            gap: 12px;
+            padding: 0 5px;
         }
 
         .brand-logo {
-            height: 50px; /* Adjust based on your preference */
+            height: 42px; 
             width: auto;
-            object-fit: contain;
-            border-radius: 8px; /* Softens corners if image has background */
+            border-radius: 8px;
+        }
+
+        .brand-text {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 1.4rem;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            color: #ffffff;
+            background: linear-gradient(120deg, #ffffff, #a8c7fa);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
         
         .new-chat-btn {
@@ -103,18 +118,85 @@
             width: calc(100% - 280px);
         }
 
-        /* Mobile Header */
-        .mobile-header {
-            display: none;
-            padding: 10px 20px;
-            background: var(--bg-body);
+        /* --- TOP NAVBAR (New Location for Profile) --- */
+        .top-navbar {
+            display: flex;
             align-items: center;
             justify-content: space-between;
-            position: sticky;
-            top: 0;
+            padding: 15px 20px;
+            background: transparent;
             z-index: 50;
-            border-bottom: 1px solid var(--border);
         }
+
+        .mobile-menu-btn {
+            display: none; /* Hidden on desktop */
+            background: none;
+            border: none;
+            color: #e3e3e3;
+            font-size: 1.2rem;
+            cursor: pointer;
+        }
+
+        /* Profile Pill Styling */
+        .header-profile-pill {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: #1e1f20;
+            padding: 6px 12px;
+            border-radius: 50px;
+            border: 1px solid #444746;
+            margin-left: auto; /* Pushes to right */
+            transition: border-color 0.2s;
+        }
+        .header-profile-pill:hover {
+            border-color: var(--accent);
+        }
+
+        .header-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid var(--accent);
+        }
+
+        .header-info {
+            display: flex;
+            flex-direction: column;
+            line-height: 1.1;
+        }
+
+        .header-name {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: #fff;
+            max-width: 100px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .header-badge {
+            font-size: 0.65rem;
+            color: var(--accent);
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .header-logout {
+            background: none;
+            border: none;
+            color: #ff6b6b;
+            cursor: pointer;
+            padding: 5px;
+            margin-left: 5px;
+            font-size: 0.9rem;
+            opacity: 0.7;
+            transition: opacity 0.2s;
+        }
+        .header-logout:hover { opacity: 1; }
+
 
         /* --- CHAT AREA --- */
         .chat-scroll-area {
@@ -136,7 +218,7 @@
             gap: 30px;
         }
 
-        /* --- MESSAGES --- */
+        /* --- MESSAGES & AUTH STYLES (Kept Same) --- */
         .message-wrapper.user {
             align-self: flex-end;
             max-width: 80%;
@@ -144,7 +226,6 @@
             flex-direction: column;
             align-items: flex-end;
         }
-
         .user-bubble {
             background: var(--user-bubble);
             padding: 12px 18px;
@@ -154,7 +235,6 @@
             line-height: 1.6;
             font-size: 0.95rem;
         }
-
         .message-wrapper.bot {
             align-self: flex-start;
             width: 100%;
@@ -162,8 +242,6 @@
             gap: 16px;
             margin-top: 10px;
         }
-
-        /* Using a smaller version of logo as avatar or generic robot */
         .bot-avatar {
             width: 32px;
             height: 32px;
@@ -177,13 +255,6 @@
             font-size: 1rem;
             overflow: hidden;
         }
-        
-        .bot-avatar img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
         .bot-content {
             flex: 1;
             min-width: 0;
@@ -191,8 +262,6 @@
             font-size: 1rem;
             color: #e3e3e3;
         }
-
-        /* Markdown Styles */
         .bot-content h1, .bot-content h2 { margin: 20px 0 10px; color: #fff; font-weight: 600; }
         .bot-content h2 { font-size: 1.4rem; }
         .bot-content h3 { font-size: 1.1rem; color: var(--accent); margin-top: 20px; }
@@ -201,7 +270,6 @@
         .bot-content ul, .bot-content ol { margin-left: 20px; margin-bottom: 15px; color: #c4c7c5; }
         .bot-content li { margin-bottom: 6px; }
 
-        /* Code Editor */
         .code-block-wrapper {
             margin: 15px 0;
             border-radius: 8px;
@@ -209,7 +277,6 @@
             background: #1e1f20;
             overflow: hidden;
         }
-
         .code-header {
             display: flex;
             justify-content: space-between;
@@ -218,9 +285,7 @@
             background: #2b2d30;
             border-bottom: 1px solid #444746;
         }
-
         .code-lang { font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; color: #a8c7fa; text-transform: uppercase; }
-        
         .code-copy-btn {
             background: transparent;
             border: none;
@@ -234,18 +299,14 @@
             border-radius: 4px;
         }
         .code-copy-btn:hover { background: rgba(255,255,255,0.1); color: #fff; }
-
         pre { margin: 0; padding: 15px; overflow-x: auto; }
         code { font-family: 'JetBrains Mono', monospace; font-size: 0.9rem; }
-
-        /* Action Bar */
         .bot-actions {
             display: flex;
             gap: 10px;
             margin-top: 15px;
             padding-top: 10px;
         }
-
         .action-icon-btn {
             background: transparent;
             border: 1px solid transparent;
@@ -261,7 +322,7 @@
         }
         .action-icon-btn:hover { background: rgba(255,255,255,0.08); color: var(--accent); }
 
-        /* --- INPUT AREA --- */
+        /* Input Area */
         .input-container {
             position: fixed;
             bottom: 0;
@@ -274,7 +335,6 @@
             align-items: center;
             z-index: 50;
         }
-
         .input-wrapper {
             width: 100%;
             max-width: var(--max-width);
@@ -286,9 +346,7 @@
             border: 1px solid transparent;
             transition: border 0.2s;
         }
-
         .input-wrapper:focus-within { border-color: rgba(255,255,255,0.2); background: #282a2c; }
-
         textarea {
             flex: 1;
             background: transparent;
@@ -301,7 +359,6 @@
             outline: none;
             line-height: 1.5;
         }
-
         .send-btn {
             width: 40px;
             height: 40px;
@@ -319,7 +376,6 @@
             transition: transform 0.2s;
         }
         .send-btn:hover { transform: scale(1.05); }
-
         .disclaimer {
             margin-top: 10px;
             font-size: 0.75rem;
@@ -329,28 +385,140 @@
             opacity: 0.7;
         }
 
+        /* --- AUTH STYLES (Overlay) --- */
+        .auth-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.85);
+            backdrop-filter: blur(10px);
+            z-index: 9999;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .auth-box {
+            background: #1e1f20;
+            width: 100%;
+            max-width: 420px;
+            padding: 30px;
+            border-radius: 20px;
+            border: 1px solid var(--border);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+        .auth-header { text-align: center; margin-bottom: 20px; }
+        .auth-header h2 { color: #fff; margin-bottom: 5px; }
+        .auth-header p { color: #888; font-size: 0.9rem; }
+        .auth-tabs { display: flex; background: #131314; padding: 5px; border-radius: 10px; margin-bottom: 20px; }
+        .auth-tab { flex: 1; padding: 10px; text-align: center; cursor: pointer; border-radius: 8px; color: #888; font-weight: 600; transition: 0.3s; }
+        .auth-tab.active { background: #333; color: #fff; }
+        .form-group { margin-bottom: 15px; }
+        .form-group label { display: block; color: #aaa; margin-bottom: 5px; font-size: 0.85rem; }
+        .form-group input { width: 100%; background: #131314; border: 1px solid #333; padding: 12px; border-radius: 8px; color: #fff; outline: none; }
+        .form-group input:focus { border-color: var(--accent); }
+        .form-check { display: flex; align-items: flex-start; gap: 10px; margin-bottom: 15px; }
+        .form-check input { margin-top: 4px; }
+        .form-check label { font-size: 0.8rem; color: #888; line-height: 1.4; }
+        .btn-primary { width: 100%; background: var(--accent); color: #000; padding: 12px; border: none; border-radius: 8px; font-weight: 700; cursor: pointer; font-size: 1rem; transition: 0.2s; }
+        .btn-primary:hover { opacity: 0.9; }
+        .google-btn { width: 100%; background: #fff; color: #333; margin-top: 15px; padding: 12px; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; }
+        .error-msg { color: #ff6b6b; font-size: 0.85rem; margin-bottom: 15px; text-align: center; display: none; }
+
+
         /* --- MOBILE RESPONSIVE --- */
         @media (max-width: 768px) {
             .sidebar { transform: translateX(-100%); }
             .sidebar.active { transform: translateX(0); }
             .main-content { margin-left: 0; width: 100%; }
-            .mobile-header { display: flex; }
+            .mobile-menu-btn { display: block; }
             .input-container { left: 0; padding: 10px 15px; }
             .message-wrapper.user { max-width: 90%; }
             .code-block-wrapper { max-width: 100%; width: 100%; }
             pre { white-space: pre; }
             .disclaimer { font-size: 0.7rem; }
+            
+            /* Adjust Top Bar for Mobile */
+            .top-navbar {
+                background: var(--bg-body); /* Solid bg on mobile */
+                border-bottom: 1px solid var(--border);
+                position: sticky;
+                top: 0;
+            }
         }
     </style>
 </head>
 <body>
 
+    <div class="auth-overlay" id="auth-modal">
+        <div class="auth-box">
+            <div class="auth-header">
+                <img src="elegets-logo-cut.png" alt="Logo" style="height: 40px; margin-bottom: 10px;">
+                <h2>Welcome to Elegets</h2>
+                <p>Sign in to continue to your workspace</p>
+            </div>
+            <div class="error-msg" id="auth-error"></div>
+            <div class="auth-tabs">
+                <div class="auth-tab active" onclick="switchAuthTab('login')">Sign In</div>
+                <div class="auth-tab" onclick="switchAuthTab('register')">Sign Up</div>
+            </div>
+            <form id="login-form">
+                <div class="form-group">
+                    <label>Email Address</label>
+                    <input type="email" id="login-email" placeholder="name@example.com" required>
+                </div>
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" id="login-password" placeholder="••••••••" required>
+                </div>
+                <button type="submit" class="btn-primary">Sign In</button>
+            </form>
+            <form id="register-form" style="display: none;">
+                <div class="form-group"><label>Full Name</label><input type="text" id="reg-name" required></div>
+                <div class="form-group"><label>Profile Picture URL</label><input type="url" id="reg-pic" placeholder="https://..." ></div>
+                <div style="display: flex; gap: 10px;">
+                    <div class="form-group" style="flex:1"><label>Age</label><input type="number" id="reg-age" required></div>
+                    <div class="form-group" style="flex:2"><label>Phone Number</label><input type="tel" id="reg-phone" required></div>
+                </div>
+                <div class="form-group"><label>City</label><input type="text" id="reg-city" required></div>
+                <div class="form-group"><label>Email Address</label><input type="email" id="reg-email" required></div>
+                <div class="form-group"><label>Password</label><input type="password" id="reg-password" required></div>
+                <div class="form-check">
+                    <input type="checkbox" id="reg-terms" required>
+                    <label for="reg-terms">I agree to the Terms of Service and Privacy Policy.</label>
+                </div>
+                <button type="submit" class="btn-primary">Create Account</button>
+            </form>
+            <button class="google-btn" onclick="signInWithGoogle()">
+                <i class="fab fa-google"></i> Continue with Google
+            </button>
+        </div>
+    </div>
+
+    <div class="auth-overlay" id="complete-profile-modal" style="display: none; z-index: 10000;">
+        <div class="auth-box">
+            <div class="auth-header"><h2>Complete Profile</h2><p>We need a few more details to set up your account.</p></div>
+            <div class="error-msg" id="complete-error"></div>
+            <form id="complete-profile-form">
+                <div style="display: flex; gap: 10px;">
+                    <div class="form-group" style="flex:1"><label>Age</label><input type="number" id="comp-age" required></div>
+                    <div class="form-group" style="flex:2"><label>Phone Number</label><input type="tel" id="comp-phone" required></div>
+                </div>
+                <div class="form-group"><label>City</label><input type="text" id="comp-city" required></div>
+                <div class="form-check"><input type="checkbox" id="comp-terms" required><label for="comp-terms">I agree to the Terms of Service.</label></div>
+                <button type="submit" class="btn-primary">Save & Continue</button>
+            </form>
+        </div>
+    </div>
+
     <div class="sidebar-overlay" id="sidebar-overlay" onclick="toggleSidebar()"></div>
 
     <div class="sidebar" id="sidebar">
         <div class="sidebar-header">
-            <img src="elegets-logo-cut.png" alt="Elegets AI" class="brand-logo">  AI
+            <img src="elegets-logo-cut.png" alt="Elegets AI" class="brand-logo">
+            <span class="brand-text">Elegets AI</span>
         </div>
+        
         <button class="new-chat-btn" onclick="resetChat()">
             <i class="fas fa-plus"></i> New Chat
         </button>
@@ -358,26 +526,25 @@
 
     <div class="main-content">
         
-        <div class="mobile-header">
-            <div style="display:flex; align-items:center;">
-                <img src="elegets-logo-cut.png" alt="Elegets" class="brand-logo" style="height: 35px;">
-            </div>
-            <button onclick="toggleSidebar()" style="background:none; border:none; color:#e3e3e3; font-size:1.2rem;">
+        <div class="top-navbar">
+            <button class="mobile-menu-btn" onclick="toggleSidebar()">
                 <i class="fas fa-bars"></i>
             </button>
+
+            <div class="header-profile-pill" id="user-profile-ui" style="display: none;">
+                <img id="sidebar-user-img" src="" class="header-avatar">
+                <div class="header-info">
+                    <div id="sidebar-user-name" class="header-name">User</div>
+                    <div class="header-badge">Free Plan</div>
+                </div>
+                <button class="header-logout" onclick="logout()" title="Log Out">
+                    <i class="fas fa-sign-out-alt"></i>
+                </button>
+            </div>
         </div>
 
         <div class="chat-scroll-area" id="chat-scroll-area">
             <div class="chat-width-limiter" id="chat-container">
-                <div class="message-wrapper bot">
-                    <div class="bot-avatar">
-                        <i class="fas fa-robot"></i>
-                    </div>
-                    <div class="bot-content">
-                        <p><strong>Hello! I'm Elegets AI.</strong></p>
-                        <p>I can help you with code, circuit diagrams, and IoT logic. How can I assist you today?</p>
-                    </div>
-                </div>
             </div>
         </div>
 
@@ -393,39 +560,165 @@
     </div>
 
     <script>
-        const BACKEND_URL = 'https://elegets-chatbot1.vercel.app/';
-        let conversationHistory = [];
-        const messageStore = {}; 
+        // ==========================================
+        // 1. FIREBASE CONFIGURATION
+        // ==========================================
+        const firebaseConfig = {
+            apiKey: "AIzaSyA8HrBYrVvqv3MqbXAMPhh2XSEyu4gdjNs",
+            authDomain: "elegets-ai.firebaseapp.com",
+            databaseURL: "https://elegets-ai-default-rtdb.firebaseio.com",
+            projectId: "elegets-ai",
+            storageBucket: "elegets-ai.firebasestorage.app",
+            messagingSenderId: "322707906102",
+            appId: "1:322707906102:web:32bfa054c3dd370c890297",
+            measurementId: "G-TMG681SETX"
+        };
 
-        // --- MARKED CONFIG ---
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+        const db = firebase.database();
+        const provider = new firebase.auth.GoogleAuthProvider();
+
+        const BACKEND_URL = 'https://elegets-chatbot1.vercel.app/';
+
+        // ==========================================
+        // 2. AUTHENTICATION LOGIC
+        // ==========================================
+
+        const authModal = document.getElementById('auth-modal');
+        const completeProfileModal = document.getElementById('complete-profile-modal');
+        const userProfileUI = document.getElementById('user-profile-ui');
+        const authError = document.getElementById('auth-error');
+
+        auth.onAuthStateChanged(async (user) => {
+            if (user) {
+                const userRef = db.ref('users/' + user.uid);
+                userRef.once('value').then((snapshot) => {
+                    const userData = snapshot.val();
+                    if (userData) {
+                        authModal.style.display = "none";
+                        completeProfileModal.style.display = "none";
+                        updateSidebarProfile(userData);
+                    } else {
+                        authModal.style.display = "none";
+                        completeProfileModal.style.display = "flex"; 
+                    }
+                });
+                renderHistoryFromStorage();
+            } else {
+                authModal.style.display = "flex";
+                userProfileUI.style.display = "none";
+                document.getElementById('chat-container').innerHTML = '';
+            }
+        });
+
+        function updateSidebarProfile(data) {
+            document.getElementById('sidebar-user-name').textContent = data.name || "User";
+            const imgUrl = data.profilePic || `https://ui-avatars.com/api/?name=${encodeURIComponent(data.name)}&background=a8c7fa&color=000`;
+            document.getElementById('sidebar-user-img').src = imgUrl;
+            userProfileUI.style.display = "flex"; // Note: It is display flex in CSS, but hidden initially
+        }
+
+        // --- AUTH FORMS ---
+        function switchAuthTab(tab) {
+            const loginForm = document.getElementById('login-form');
+            const regForm = document.getElementById('register-form');
+            const tabs = document.querySelectorAll('.auth-tab');
+            authError.style.display = 'none';
+
+            if (tab === 'login') {
+                loginForm.style.display = 'block';
+                regForm.style.display = 'none';
+                tabs[0].classList.add('active');
+                tabs[1].classList.remove('active');
+            } else {
+                loginForm.style.display = 'none';
+                regForm.style.display = 'block';
+                tabs[0].classList.remove('active');
+                tabs[1].classList.add('active');
+            }
+        }
+
+        document.getElementById('register-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            authError.style.display = 'none';
+            const email = document.getElementById('reg-email').value;
+            const password = document.getElementById('reg-password').value;
+            const name = document.getElementById('reg-name').value;
+            const phone = document.getElementById('reg-phone').value;
+            const age = document.getElementById('reg-age').value;
+            const city = document.getElementById('reg-city').value;
+            const pic = document.getElementById('reg-pic').value;
+            
+            try {
+                const userCredential = await auth.createUserWithEmailAndPassword(email, password);
+                const user = userCredential.user;
+                await db.ref('users/' + user.uid).set({
+                    uid: user.uid, name: name, email: email, phone: phone, age: age, city: city, profilePic: pic,
+                    termsAccepted: true, plan: 'free', createdAt: new Date().toISOString()
+                });
+            } catch (error) {
+                authError.textContent = error.message;
+                authError.style.display = 'block';
+            }
+        });
+
+        document.getElementById('login-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            authError.style.display = 'none';
+            const email = document.getElementById('login-email').value;
+            const password = document.getElementById('login-password').value;
+            try { await auth.signInWithEmailAndPassword(email, password); } 
+            catch (error) { authError.textContent = "Invalid email or password."; authError.style.display = 'block'; }
+        });
+
+        async function signInWithGoogle() {
+            try { await auth.signInWithPopup(provider); } 
+            catch (error) { authError.textContent = error.message; authError.style.display = 'block'; }
+        }
+
+        document.getElementById('complete-profile-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const user = auth.currentUser;
+            if(!user) return;
+            const age = document.getElementById('comp-age').value;
+            const phone = document.getElementById('comp-phone').value;
+            const city = document.getElementById('comp-city').value;
+            try {
+                await db.ref('users/' + user.uid).set({
+                    uid: user.uid, name: user.displayName, email: user.email, profilePic: user.photoURL,
+                    phone: phone, age: age, city: city, termsAccepted: true, plan: 'free', createdAt: new Date().toISOString()
+                });
+                completeProfileModal.style.display = "none";
+                updateSidebarProfile({ name: user.displayName, profilePic: user.photoURL });
+            } catch (error) { document.getElementById('complete-error').textContent = error.message; }
+        });
+
+        function logout() { auth.signOut(); }
+
+        // ==========================================
+        // 3. CHAT APP LOGIC
+        // ==========================================
+        const messageStore = {}; 
         const renderer = new marked.Renderer();
         renderer.code = function({ text, lang }) {
             const code = text || "";
             const language = lang || "text";
             const id = 'code-' + Math.random().toString(36).substr(2, 9);
             messageStore[id] = code;
-            
-            return `
-            <div class="code-block-wrapper">
-                <div class="code-header">
-                    <span class="code-lang">${language}</span>
-                    <button class="code-copy-btn" onclick="copyFromStore('${id}')">
-                        <i class="fas fa-copy"></i> Copy
-                    </button>
-                </div>
-                <pre><code class="hljs language-${language}">${code}</code></pre>
-            </div>`;
+            return `<div class="code-block-wrapper"><div class="code-header"><span class="code-lang">${language}</span><button class="code-copy-btn" onclick="copyFromStore('${id}')"><i class="fas fa-copy"></i> Copy</button></div><pre><code class="hljs language-${language}">${code}</code></pre></div>`;
         };
         marked.use({ renderer });
 
-        // --- APP LOGIC ---
+        let conversationHistory = JSON.parse(localStorage.getItem('elegetsHistory')) || [{ role: "system", content: "You are Elegets AI, an expert assistant for Electronics, IoT, Arduino, ESP32." }];
+
         document.addEventListener('DOMContentLoaded', () => {
             const input = document.getElementById('user-input');
             const btn = document.getElementById('send-btn');
             const container = document.getElementById('chat-container');
             const scrollArea = document.getElementById('chat-scroll-area');
 
-            // Auto-Resize Input
             input.addEventListener('input', function() {
                 this.style.height = 'auto';
                 this.style.height = Math.min(this.scrollHeight, 150) + 'px';
@@ -434,130 +727,69 @@
             async function sendMessage() {
                 const text = input.value.trim();
                 if (!text) return;
-
-                // 1. User Message
-                const userDiv = document.createElement('div');
-                userDiv.className = 'message-wrapper user';
-                userDiv.innerHTML = `<div class="user-bubble">${escapeHtml(text)}</div>`;
-                container.appendChild(userDiv);
-                
+                renderMessage('user', text);
                 conversationHistory.push({ role: "user", content: text });
-                input.value = '';
-                input.style.height = 'auto';
-                scrollToBottom();
-
-                // 2. Loading
+                localStorage.setItem('elegetsHistory', JSON.stringify(conversationHistory));
+                input.value = ''; input.style.height = 'auto'; scrollToBottom();
                 const loadingId = showLoading();
 
                 try {
                     const response = await fetch(BACKEND_URL, {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ 
-                            message: text,
-                            history: conversationHistory 
-                        })
+                        body: JSON.stringify({ message: text, history: conversationHistory })
                     });
-                    
+                    if (!response.ok) throw new Error("Backend Error");
                     const data = await response.json();
                     document.getElementById(loadingId).remove();
-                    
-                    // 3. Bot Message
-                    addBotMessage(data.reply);
+                    renderMessage('bot', data.reply);
                     conversationHistory.push({ role: "assistant", content: data.reply });
-
+                    localStorage.setItem('elegetsHistory', JSON.stringify(conversationHistory));
                 } catch (error) {
+                    console.error(error);
                     if(document.getElementById(loadingId)) document.getElementById(loadingId).remove();
-                    addBotMessage("Error: Unable to connect to server.");
+                    renderMessage('bot', "**Connection Error:** Could not reach server.");
                 }
             }
 
-            function addBotMessage(text) {
-                const msgId = 'bot-' + Date.now();
-                messageStore[msgId] = text; 
-                
+            window.renderMessage = function(role, text) {
                 const div = document.createElement('div');
-                div.className = 'message-wrapper bot';
-                div.innerHTML = `
-                    <div class="bot-avatar"><i class="fas fa-robot"></i></div>
-                    <div class="bot-content">
-                        ${marked.parse(text)}
-                        <div class="bot-actions">
-                            <button class="action-icon-btn" onclick="copyFromStore('${msgId}')">
-                                <i class="fas fa-copy"></i> Copy
-                            </button>
-                            <button class="action-icon-btn" onclick="shareFromStore('${msgId}')">
-                                <i class="fas fa-share-alt"></i> Share
-                            </button>
-                        </div>
-                    </div>
-                `;
+                div.className = `message-wrapper ${role}`;
+                if (role === 'user') div.innerHTML = `<div class="user-bubble">${escapeHtml(text)}</div>`;
+                else {
+                    const msgId = 'bot-' + Date.now() + Math.random();
+                    messageStore[msgId] = text; 
+                    div.innerHTML = `<div class="bot-avatar"><i class="fas fa-robot"></i></div><div class="bot-content">${marked.parse(text)}<div class="bot-actions"><button class="action-icon-btn" onclick="copyFromStore('${msgId}')"><i class="fas fa-copy"></i> Copy</button><button class="action-icon-btn" onclick="shareFromStore('${msgId}')"><i class="fas fa-share-alt"></i> Share</button></div></div>`;
+                }
                 container.appendChild(div);
-                div.querySelectorAll('pre code').forEach(el => hljs.highlightElement(el));
+                if (role === 'bot') div.querySelectorAll('pre code').forEach(el => hljs.highlightElement(el));
                 scrollToBottom();
+            }
+
+            window.renderHistoryFromStorage = function() {
+                const container = document.getElementById('chat-container');
+                container.innerHTML = '';
+                if (conversationHistory.length <= 1) { renderMessage('bot', "**Hello! I'm Elegets AI.**\n\nHow can I help you today?"); return; }
+                conversationHistory.forEach(msg => { if (msg.role === 'user') renderMessage('user', msg.content); if (msg.role === 'assistant') renderMessage('bot', msg.content); });
             }
 
             function showLoading() {
                 const id = 'loading-' + Date.now();
                 const div = document.createElement('div');
-                div.id = id;
-                div.className = 'message-wrapper bot';
-                div.innerHTML = `
-                    <div class="bot-avatar"><i class="fas fa-robot"></i></div>
-                    <div class="bot-content" style="color:#a8c7fa">Generating response...</div>
-                `;
-                container.appendChild(div);
-                scrollToBottom();
-                return id;
+                div.id = id; div.className = 'message-wrapper bot';
+                div.innerHTML = `<div class="bot-avatar"><i class="fas fa-robot"></i></div><div class="bot-content" style="color:#a8c7fa">Thinking...</div>`;
+                container.appendChild(div); scrollToBottom(); return id;
             }
-
-            function scrollToBottom() {
-                scrollArea.scrollTop = scrollArea.scrollHeight;
-            }
-
-            // Events
+            function scrollToBottom() { scrollArea.scrollTop = scrollArea.scrollHeight; }
             btn.addEventListener('click', sendMessage);
-            input.addEventListener('keydown', (e) => {
-                if (e.key === 'Enter' && !e.shiftKey) {
-                    e.preventDefault();
-                    sendMessage();
-                }
-            });
+            input.addEventListener('keydown', (e) => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); } });
         });
 
-        // --- UTILITIES ---
-        window.copyFromStore = function(id) {
-            const text = messageStore[id];
-            if(text) {
-                navigator.clipboard.writeText(text);
-                alert("Copied!");
-            }
-        }
-
-        window.shareFromStore = function(id) {
-            const text = messageStore[id];
-            if(navigator.share && text) {
-                navigator.share({ title: 'Elegets AI', text: text });
-            } else {
-                window.copyFromStore(id);
-            }
-        }
-
-        function toggleSidebar() {
-            document.getElementById('sidebar').classList.toggle('active');
-            document.getElementById('sidebar-overlay').classList.toggle('active');
-        }
-
-        function resetChat() {
-            conversationHistory = [];
-            document.getElementById('chat-container').innerHTML = '';
-            if(window.innerWidth < 768) toggleSidebar();
-            location.reload();
-        }
-
-        function escapeHtml(text) {
-            return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
-        }
+        window.copyFromStore = function(id) { const text = messageStore[id]; if(text) { navigator.clipboard.writeText(text); alert("Copied!"); } }
+        window.shareFromStore = function(id) { const text = messageStore[id]; if(navigator.share && text) navigator.share({ title: 'Elegets AI', text: text }); else window.copyFromStore(id); }
+        window.toggleSidebar = function() { document.getElementById('sidebar').classList.toggle('active'); document.getElementById('sidebar-overlay').classList.toggle('active'); }
+        window.resetChat = function() { localStorage.removeItem('elegetsHistory'); conversationHistory = [{ role: "system", content: "You are Elegets AI." }]; document.getElementById('chat-container').innerHTML = ''; location.reload(); }
+        function escapeHtml(text) { return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;"); }
     </script>
 </body>
 </html>

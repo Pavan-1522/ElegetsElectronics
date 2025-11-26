@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Elegets AI | User Management</title>
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="icon" href="elegets-logo-cut.png" type="image/png">
+
+    <!-- FIREBASE SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+
+    <style>
+        :root {
+            --bg-body: #131314;
+            --bg-card: #1e1f20;
+            --text-primary: #e3e3e3;
+            --text-secondary: #a8c7fa;
+            --accent: #a8c7fa; 
+            --danger: #ff6b6b;
+            --border: #444746;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background-color: var(--bg-body);
+            color: var(--text-primary);
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* --- NAVBAR --- */
+        .navbar {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            padding: 20px 40px;
+            display: flex;
+            align-items: center;
+            border-bottom: 1px solid var(--border);
+            background: var(--bg-body);
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-weight: 800;
+            font-size: 1.2rem;
+            color: #fff;
+        }
+
+        .brand img { height: 32px; border-radius: 6px; }
+
+        .back-link {
+            margin-left: auto;
+            color: #888;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color 0.2s;
+        }
+        .back-link:hover { color: #fff; }
+
+        /* --- ADMIN CARD --- */
+        .admin-container {
+            width: 100%;
+            max-width: 500px;
+            padding: 20px;
+        }
+
+        .admin-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+        }
+
+        .card-header { text-align: center; margin-bottom: 30px; }
+        .card-header h1 { font-size: 1.8rem; margin-bottom: 10px; }
+        .card-header p { color: #888; font-size: 0.9rem; }
+
+        /* Search Section */
+        .search-box {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        input {
+            flex: 1;
+            background: #131314;
+            border: 1px solid #333;
+            padding: 12px 16px;
+            border-radius: 12px;
+            color: #fff;
+            outline: none;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+        input:focus { border-color: var(--accent); }
+
+        .btn {
+            padding: 12px 20px;
+            border-radius: 12px;
+            border: none;
+            font-weight: 600;
+            cursor: pointer;
+            transition: opacity 0.2s;
+        }
+        .btn-search { background: var(--accent); color: #000; }
+        .btn-danger { background: rgba(255, 107, 107, 0.1); color: var(--danger); border: 1px solid var(--danger); width: 100%; margin-top: 20px;}
+        .btn:hover { opacity: 0.9; }
+
+        /* Result Section */
+        .user-result {
+            background: rgba(255,255,255,0.03);
+            border-radius: 16px;
+            padding: 20px;
+            margin-top: 20px;
+            display: none; /* Hidden by default */
+            text-align: center;
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .result-avatar {
+            width: 80px; height: 80px; border-radius: 50%; 
+            object-fit: cover; border: 3px solid var(--accent);
+            margin-bottom: 15px;
+        }
+
+        .result-info h3 { margin-bottom: 5px; }
+        .result-info p { color: #888; font-size: 0.85rem; margin-bottom: 5px; }
+        
+        .data-row {
+            display: flex; justify-content: space-between;
+            font-size: 0.85rem; color: #aaa;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            padding: 8px 0;
+        }
+
+        .status-msg {
+            text-align: center;
+            margin-top: 15px;
+            font-size: 0.9rem;
+            min-height: 20px;
+            line-height: 1.5;
+        }
+        .text-error { color: var(--danger); }
+        .text-success { color: #4caf50; }
+
+    </style>
+</head>
+<body>
+
+    <nav class="navbar">
+        <div class="brand">
+            <img src="elegets-logo-cut.png" alt="Elegets">
+            <span>Elegets Admin</span>
+        </div>
+        <a href="index.html" class="back-link">Back to Workspace</a>
+    </nav>
+
+    <div class="admin-container">
+        <div class="admin-card">
+            <div class="card-header">
+                <h1>Delete User</h1>
+                <p>Enter email to locate and remove user data.</p>
+            </div>
+
+            <div class="search-box">
+                <input type="email" id="search-email" placeholder="user@example.com" required>
+                <button class="btn btn-search" onclick="searchUser()">
+                    <i class="fas fa-search"></i>
+                </button>
+            </div>
+
+            <div class="status-msg" id="status-msg"></div>
+
+            <!-- Result Display -->
+            <div class="user-result" id="user-result">
+                <img src="" id="res-img" class="result-avatar">
+                <div class="result-info">
+                    <h3 id="res-name">User Name</h3>
+                    <p id="res-uid" style="font-family: monospace; font-size: 0.7rem;">UID: ...</p>
+                </div>
+                
+                <div style="margin-top: 20px; text-align: left;">
+                    <div class="data-row"><span>Email:</span> <span id="res-email" style="color:#fff"></span></div>
+                    <div class="data-row"><span>Phone:</span> <span id="res-phone" style="color:#fff"></span></div>
+                    <div class="data-row"><span>Plan:</span> <span id="res-plan" style="color:var(--accent)"></span></div>
+                </div>
+
+                <button class="btn btn-danger" onclick="deleteUserPermanently()">
+                    <i class="fas fa-trash-alt"></i> Permanently Delete User
+                </button>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        // 1. FIREBASE CONFIG (Must match your main app)
+        const firebaseConfig = {
+            apiKey: "AIzaSyA8HrBYrVvqv3MqbXAMPhh2XSEyu4gdjNs",
+            authDomain: "elegets-ai.firebaseapp.com",
+            databaseURL: "https://elegets-ai-default-rtdb.firebaseio.com",
+            projectId: "elegets-ai",
+            storageBucket: "elegets-ai.firebasestorage.app",
+            messagingSenderId: "322707906102",
+            appId: "1:322707906102:web:32bfa054c3dd370c890297",
+            measurementId: "G-TMG681SETX"
+        };
+
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.database();
+        
+        // State to hold found user
+        let currentFoundUser = null;
+
+        // UI Elements
+        const statusMsg = document.getElementById('status-msg');
+        const resultDiv = document.getElementById('user-result');
+
+        // --- SEARCH FUNCTION ---
+        async function searchUser() {
+            const email = document.getElementById('search-email').value.trim();
+            if(!email) return showStatus("Please enter an email.", "error");
+
+            showStatus("Searching database...", "normal");
+            resultDiv.style.display = "none";
+            currentFoundUser = null;
+
+            try {
+                // Query RTDB by Email
+                // Note: This requires .indexOn rule for 'email' in Firebase Rules
+                const usersRef = db.ref('users');
+                const snapshot = await usersRef.orderByChild('email').equalTo(email).once('value');
+
+                if (snapshot.exists()) {
+                    // User Found
+                    const data = snapshot.val();
+                    const key = Object.keys(data)[0]; // Get the UID key
+                    currentFoundUser = data[key];
+                    
+                    displayUser(currentFoundUser);
+                    showStatus("", "normal");
+                } else {
+                    showStatus("User not found in Database.", "error");
+                }
+
+            } catch (error) {
+                console.error(error);
+                showStatus("Search failed. Ensure you have Admin permissions.", "error");
+            }
+        }
+
+        function displayUser(user) {
+            document.getElementById('res-name').textContent = user.name || "Unknown";
+            document.getElementById('res-email').textContent = user.email;
+            document.getElementById('res-phone').textContent = user.phone || "N/A";
+            document.getElementById('res-uid').textContent = "UID: " + user.uid;
+            document.getElementById('res-plan').textContent = (user.plan || "Free").toUpperCase();
+            
+            const img = document.getElementById('res-img');
+            img.src = user.profilePic || `https://ui-avatars.com/api/?name=${user.name}&background=333&color=fff`;
+
+            resultDiv.style.display = "block";
+        }
+
+        // --- DELETE FUNCTION ---
+        async function deleteUserPermanently() {
+            if(!currentFoundUser) return;
+
+            const confirmDelete = confirm(`Are you sure you want to delete ${currentFoundUser.name}? This cannot be undone.`);
+            if(!confirmDelete) return;
+
+            try {
+                // 1. Delete from Realtime Database (Client-side Admin can do this)
+                await db.ref('users/' + currentFoundUser.uid).remove();
+
+                // 2. UI Feedback explaining the limitation
+                // Client SDK cannot delete other users from Auth.
+                
+                // Reset UI
+                resultDiv.style.display = "none";
+                document.getElementById('search-email').value = "";
+                
+                // Custom HTML Message to explain Auth situation
+                statusMsg.innerHTML = `
+                    <div style="color:#4caf50; margin-bottom:10px; font-weight:700;">
+                        <i class="fas fa-check-circle"></i> User Data Deleted from Database.
+                    </div>
+                    <div style="background:rgba(255,152,0,0.1); color:#ffb74d; padding:10px; border-radius:8px; font-size:0.8rem; border:1px solid rgba(255,152,0,0.3);">
+                        <i class="fas fa-exclamation-triangle"></i> <b>Action Required:</b><br>
+                        Browser code cannot delete the <b>Login Account</b> (Authentication) of another user for security reasons.<br><br>
+                        Please manually delete <b>${currentFoundUser.email}</b> from the <a href="https://console.firebase.google.com/" target="_blank" style="color:#ffb74d; text-decoration:underline;">Firebase Console &rarr; Authentication</a> tab.
+                    </div>
+                `;
+
+            } catch (error) {
+                showStatus("Delete failed: " + error.message, "error");
+            }
+        }
+
+        function showStatus(msg, type) {
+            statusMsg.textContent = msg;
+            statusMsg.className = "status-msg " + (type === "error" ? "text-error" : "text-success");
+            if(type === 'normal') statusMsg.className = "status-msg";
+        }
+    </script>
+</body>
+</html>
