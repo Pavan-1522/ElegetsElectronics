@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Image & Voice to Text Converter</title>
+  <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      margin-top: 40px;
+    }
+    #output {
+      margin-top: 20px;
+      white-space: pre-wrap;
+      border: 1px solid #ccc;
+      padding: 10px;
+      width: 80%;
+      margin: auto;
+      min-height: 100px;
+    }
+    button {
+      margin: 10px;
+      padding: 10px 20px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <h1>Image & Voice to Text Converter</h1>
+
+  <!-- Image to Text Section -->
+  <h3>📷 Convert Image to Text</h3>
+  <input type="file" id="imageInput" accept="image/*">
+  <button onclick="extractText()">Extract Text</button>
+
+  <!-- Voice to Text Section -->
+  <h3>🎤 Convert Voice to Text</h3>
+  <button onclick="startVoiceRecognition()">Start Speaking</button>
+
+  <p id="status"></p>
+  <div id="output"></div>
+
+  <script>
+    // Image to Text Function
+    function extractText() {
+      const image = document.getElementById('imageInput').files[0];
+      if (!image) {
+        alert("Please upload an image first!");
+        return;
+      }
+
+      document.getElementById('status').innerText = "Processing image... ⏳";
+
+      Tesseract.recognize(image, 'eng', { logger: m => console.log(m) })
+        .then(({ data: { text } }) => {
+          document.getElementById('status').innerText = "Image Text Extracted ✔";
+          document.getElementById('output').innerText = text;
+        })
+        .catch(err => {
+          console.error(err);
+          document.getElementById('status').innerText = "Error extracting image text ❌";
+        });
+    }
+
+    // Voice to Text Function
+    function startVoiceRecognition() {
+      if (!('SpeechRecognition' in window || 'webkitSpeechRecognition' in window)) {
+        alert("Your browser does not support Speech Recognition.");
+        return;
+      }
+
+      const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+      recognition.lang = "en-IN"; // English-India accent support
+      recognition.interimResults = false;
+      recognition.maxAlternatives = 1;
+
+      document.getElementById('status').innerText = "Listening... 🎙 Speak now";
+
+      recognition.start();
+
+      recognition.onresult = function (event) {
+        const speechToText = event.results[0][0].transcript;
+        document.getElementById('output').innerText = speechToText;
+        document.getElementById('status').innerText = "Voice Text Extracted ✔";
+      };
+
+      recognition.onerror = function (event) {
+        console.error(event.error);
+        document.getElementById('status').innerText = "Voice Recognition Error ❌";
+      };
+
+      recognition.onend = function () {
+        document.getElementById('status').innerText += " | Stopped Listening 🎧";
+      };
+    }
+  </script>
+</body>
+</html>
