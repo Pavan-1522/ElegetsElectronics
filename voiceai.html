@@ -97,7 +97,7 @@
             gap: 15px;
         }
 
-        /* Free Plan Badge (Outside) */
+        /* Free Plan Badge */
         .nav-plan-badge {
             background: rgba(168, 199, 250, 0.1);
             color: var(--accent);
@@ -107,7 +107,7 @@
             padding: 6px 12px;
             border-radius: 20px;
             letter-spacing: 0.5px;
-            display: none; /* Hidden by default until logged in */
+            display: none; 
         }
 
         /* Profile Trigger */
@@ -155,7 +155,6 @@
         .chat-scroll-area { flex: 1; overflow-y: auto; padding: 20px; padding-bottom: 160px; scroll-behavior: smooth; display: flex; flex-direction: column; align-items: center; }
         .chat-width-limiter { width: 100%; max-width: var(--max-width); display: flex; flex-direction: column; gap: 30px; }
 
-        /* Messages & Markdown (Same as before) */
         .message-wrapper.user { align-self: flex-end; max-width: 80%; display: flex; flex-direction: column; align-items: flex-end; }
         .user-bubble { background: var(--user-bubble); padding: 12px 18px; border-radius: 18px; border-top-right-radius: 4px; color: var(--text-primary); line-height: 1.6; font-size: 0.95rem; }
         .message-wrapper.bot { align-self: flex-start; width: 100%; display: flex; gap: 16px; margin-top: 10px; }
@@ -178,7 +177,7 @@
         .action-icon-btn { background: transparent; border: 1px solid transparent; color: #c4c7c5; padding: 6px 10px; border-radius: 8px; font-size: 0.85rem; cursor: pointer; display: flex; align-items: center; gap: 6px; transition: all 0.2s; }
         .action-icon-btn:hover { background: rgba(255,255,255,0.08); color: var(--accent); }
 
-        /* Input Area */
+        /* --- INPUT AREA & VOICE BUTTON --- */
         .input-container { position: fixed; bottom: 0; left: 280px; right: 0; background: var(--bg-body); padding: 15px 20px; display: flex; flex-direction: column; align-items: center; z-index: 50; }
         .input-wrapper { width: 100%; max-width: var(--max-width); background: var(--bg-input); border-radius: 30px; padding: 10px 20px; display: flex; align-items: flex-end; border: 1px solid transparent; transition: border 0.2s; }
         .input-wrapper:focus-within { border-color: rgba(255,255,255,0.2); background: #282a2c; }
@@ -186,6 +185,28 @@
         .send-btn { width: 40px; height: 40px; background: var(--accent); color: #000; border: none; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; flex-shrink: 0; margin-bottom: 4px; margin-left: 10px; transition: transform 0.2s; }
         .send-btn:hover { transform: scale(1.05); }
         .disclaimer { margin-top: 10px; font-size: 0.75rem; color: #c4c7c5; text-align: center; font-weight: 400; opacity: 0.7; }
+
+        /* Voice Button Styles */
+        .mic-btn { 
+            width: 40px; height: 40px; 
+            background: transparent; color: #c4c7c5; 
+            border: 1px solid rgba(255,255,255,0.1); 
+            border-radius: 50%; 
+            display: flex; align-items: center; justify-content: center; 
+            cursor: pointer; flex-shrink: 0; 
+            margin-bottom: 4px; margin-right: 8px; 
+            transition: all 0.2s; 
+        }
+        .mic-btn:hover { background: rgba(255,255,255,0.1); color: #fff; }
+        .mic-btn.listening { 
+            background: rgba(234, 67, 53, 0.15); color: #ea4335; border-color: #ea4335;
+            animation: pulse-mic 1.5s infinite; 
+        }
+        @keyframes pulse-mic {
+            0% { box-shadow: 0 0 0 0 rgba(234, 67, 53, 0.4); }
+            70% { box-shadow: 0 0 0 10px rgba(234, 67, 53, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(234, 67, 53, 0); }
+        }
 
         /* Auth Modal Styles */
         .auth-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); backdrop-filter: blur(10px); z-index: 9999; display: flex; justify-content: center; align-items: center; }
@@ -200,7 +221,6 @@
         .form-group label { display: block; color: #aaa; margin-bottom: 5px; font-size: 0.85rem; }
         .form-group input { width: 100%; background: #131314; border: 1px solid #333; padding: 12px; border-radius: 8px; color: #fff; outline: none; }
         .form-group input:focus { border-color: var(--accent); }
-        /* File Input Styling */
         input[type="file"] { padding: 10px; cursor: pointer; font-size: 0.85rem; }
         input[type="file"]::file-selector-button { background: #333; color: #fff; border: none; padding: 5px 10px; border-radius: 4px; margin-right: 10px; cursor: pointer; }
 
@@ -213,13 +233,9 @@
         .error-msg { color: #ff6b6b; font-size: 0.85rem; margin-bottom: 15px; text-align: center; display: none; }
         .success-msg { color: #4caf50; font-size: 0.85rem; margin-bottom: 15px; text-align: center; display: none; }
 
-        .forgot-link {
-            display: block; text-align: right; color: var(--accent); font-size: 0.8rem; margin-top: -10px; margin-bottom: 15px; text-decoration: none; cursor: pointer;
-        }
+        .forgot-link { display: block; text-align: right; color: var(--accent); font-size: 0.8rem; margin-top: -10px; margin-bottom: 15px; text-decoration: none; cursor: pointer; }
         .forgot-link:hover { text-decoration: underline; }
-        .back-link {
-            text-align: center; color: #888; font-size: 0.85rem; margin-top: 15px; cursor: pointer;
-        }
+        .back-link { text-align: center; color: #888; font-size: 0.85rem; margin-top: 15px; cursor: pointer; }
         .back-link:hover { color: #fff; }
 
         @media (max-width: 768px) {
@@ -239,7 +255,7 @@
         <div class="auth-box">
             <div class="auth-header">
                 <img src="elegets-logo-cut.png" alt="Logo" style="height: 40px; margin-bottom: 10px;">
-                <h2 class="brand-text">Welcome to Elegets AI</h2>
+                <h2>Welcome to Elegets</h2>
                 <p>Sign in to continue to your workspace</p>
             </div>
             
@@ -267,12 +283,7 @@
                 </div>
                 <form id="register-form">
                     <div class="form-group"><label>Full Name</label><input type="text" id="reg-name" required></div>
-                    
-                    <div class="form-group">
-                        <label>Profile Picture (Upload)</label>
-                        <input type="file" id="reg-pic-file" accept="image/*" required>
-                    </div>
-
+                    <div class="form-group"><label>Profile Picture (Upload)</label><input type="file" id="reg-pic-file" accept="image/*" required></div>
                     <div style="display: flex; gap: 10px;">
                         <div class="form-group" style="flex:1"><label>Age</label><input type="number" id="reg-age" required></div>
                         <div class="form-group" style="flex:2"><label>Phone Number</label><input type="tel" id="reg-phone" required></div>
@@ -290,7 +301,6 @@
                 <button class="btn-primary" onclick="resetPassword()">Send Reset Link</button>
                 <div class="back-link" onclick="switchAuthTab('login')">Back to Sign In</div>
             </div>
-
         </div>
     </div>
 
@@ -321,33 +331,24 @@
     </div>
 
     <div class="main-content">
-        
         <div class="top-navbar">
             <button class="mobile-menu-btn" onclick="toggleSidebar()"><i class="fas fa-bars"></i></button>
-
             <div class="nav-right-section" id="user-profile-ui" style="display: none;">
-                
                 <div class="nav-plan-badge" id="nav-badge">FREE PLAN</div>
-
                 <div class="profile-container">
                     <button class="profile-trigger" id="profile-trigger" onclick="toggleProfileMenu()">
                         <img id="nav-user-img" src="" class="trigger-avatar">
                         <span id="nav-user-name" class="trigger-name">User</span>
                         <i class="fas fa-chevron-down trigger-icon"></i>
                     </button>
-
                     <div class="profile-dropdown" id="profile-dropdown">
                         <div class="dropdown-header">
                             <div id="menu-user-name" class="dropdown-user-name">User Name</div>
                             <span id="menu-user-email" class="dropdown-user-email">user@email.com</span>
                         </div>
                         <div class="dropdown-menu-list">
-                            <button class="dropdown-item">
-                                <i class="fas fa-cog"></i> Settings
-                            </button>
-                            <button class="dropdown-item logout" onclick="logout()">
-                                <i class="fas fa-sign-out-alt"></i> Log Out
-                            </button>
+                            <button class="dropdown-item"><i class="fas fa-cog"></i> Settings</button>
+                            <button class="dropdown-item logout" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Log Out</button>
                         </div>
                     </div>
                 </div>
@@ -360,6 +361,8 @@
 
         <div class="input-container">
             <div class="input-wrapper">
+                <button class="mic-btn" id="mic-btn" title="Voice Input"><i class="fas fa-microphone"></i></button>
+                
                 <textarea id="user-input" rows="1" placeholder="Ask a question..."></textarea>
                 <button class="send-btn" id="send-btn"><i class="fas fa-arrow-up"></i></button>
             </div>
@@ -369,19 +372,14 @@
 
     <script>
     // ==========================================
-    // 1. CONFIGURATIONS
+    // CONFIGURATIONS
     // ==========================================
-    
-    // --- EMAILJS CONFIG (FILL THIS) ---
-    const EMAILJS_SERVICE_ID = "service_2yenhc6";   // e.g. service_m9p...
-    const EMAILJS_TEMPLATE_ID = "template_tfooqbd"; // e.g. template_8k...
-    const EMAILJS_PUBLIC_KEY = "NZdFltvMkjvaQcLMT";   // e.g. user_K2s...
-
-    // --- CLOUDINARY CONFIG ---
+    const EMAILJS_SERVICE_ID = "service_2yenhc6"; 
+    const EMAILJS_TEMPLATE_ID = "template_tfooqbd"; 
+    const EMAILJS_PUBLIC_KEY = "NZdFltvMkjvaQcLMT"; 
     const cloudinaryCloudName = 'dtz9eajwg';
     const cloudinaryUploadPreset = 'elegets_unsigned';
 
-    // --- FIREBASE CONFIG ---
     const firebaseConfig = {
         apiKey: "AIzaSyA8HrBYrVvqv3MqbXAMPhh2XSEyu4gdjNs",
         authDomain: "elegets-ai.firebaseapp.com",
@@ -393,17 +391,13 @@
         measurementId: "G-TMG681SETX"
     };
 
-    // Initialize Services
     firebase.initializeApp(firebaseConfig);
     const auth = firebase.auth();
     const db = firebase.database();
     const provider = new firebase.auth.GoogleAuthProvider();
     const BACKEND_URL = 'https://elegets-chatbot1.vercel.app/';
 
-    // Initialize EmailJS
-    (function(){
-        emailjs.init(EMAILJS_PUBLIC_KEY);
-    })();
+    (function(){ emailjs.init(EMAILJS_PUBLIC_KEY); })();
 
     const authModal = document.getElementById('auth-modal');
     const completeProfileModal = document.getElementById('complete-profile-modal');
@@ -435,7 +429,6 @@
         }
     });
 
-    // Update UI
     function updateProfileUI(data) {
         document.getElementById('nav-user-name').textContent = data.name || "User";
         const imgUrl = data.profilePic || `https://ui-avatars.com/api/?name=${encodeURIComponent(data.name)}&background=a8c7fa&color=000`;
@@ -446,28 +439,17 @@
         userProfileUI.style.display = "flex";
     }
 
-    // --- EMAIL SENDING FUNCTION ---
     async function sendWelcomeEmail(userData) {
         try {
             const templateParams = {
-                to_email: userData.email, // Sends to the user who just signed up
-                name: userData.name,
-                email: userData.email,
-                phone: userData.phone,
-                age: userData.age,
-                city: userData.city,
-                profilePic: userData.profilePic
+                to_email: userData.email,
+                name: userData.name, email: userData.email, phone: userData.phone,
+                age: userData.age, city: userData.city, profilePic: userData.profilePic
             };
-
             await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, templateParams);
-            console.log("Welcome email sent successfully!");
-        } catch (error) {
-            console.error("Failed to send email:", error);
-            // We do not stop the login process if email fails, just log it
-        }
+        } catch (error) { console.error("Email failed:", error); }
     }
 
-    // --- UI TOGGLES ---
     window.toggleProfileMenu = function() {
         document.getElementById('profile-dropdown').classList.toggle('show');
         document.getElementById('profile-trigger').classList.toggle('active');
@@ -485,7 +467,6 @@
         authError.style.display = 'none';
         authSuccess.style.display = 'none';
         document.getElementById('view-reset').style.display = 'none';
-        
         if (tab === 'login') {
             document.getElementById('view-login').style.display = 'block';
             document.getElementById('view-register').style.display = 'none';
@@ -512,7 +493,6 @@
         } catch (error) { authError.textContent = error.message; authError.style.display = 'block'; }
     }
 
-    // --- UPLOAD LOGIC ---
     const uploadToCloudinary = async (file) => {
         if (!file || file.size === 0) return null;
         if (!cloudinaryCloudName || !cloudinaryUploadPreset) throw new Error("Cloudinary not configured.");
@@ -525,12 +505,10 @@
         return data.secure_url;
     };
 
-    // --- REGISTRATION SUBMIT ---
     document.getElementById('register-form').addEventListener('submit', async (e) => {
         e.preventDefault();
         authError.style.display = 'none';
         const btn = document.getElementById('reg-submit-btn');
-        
         const email = document.getElementById('reg-email').value;
         const password = document.getElementById('reg-password').value;
         const name = document.getElementById('reg-name').value;
@@ -545,37 +523,24 @@
         try {
             btn.textContent = "Uploading Image...";
             btn.disabled = true;
-
             const picUrl = await uploadToCloudinary(file);
             if(!picUrl) throw new Error("Image upload failed");
-
             btn.textContent = "Creating Account...";
             const userCredential = await auth.createUserWithEmailAndPassword(email, password);
             const user = userCredential.user;
-
             const userData = {
                 uid: user.uid, name: name, email: email, phone: phone, 
                 age: age, city: city, profilePic: picUrl, 
                 termsAccepted: true, plan: 'free', createdAt: new Date().toISOString()
             };
-
-            // 1. Save to DB
             await db.ref('users/' + user.uid).set(userData);
-
-            // 2. Send Email
             await sendWelcomeEmail(userData);
-
-            // Auth listener will handle redirection
-
         } catch (error) {
-            authError.textContent = error.message;
-            authError.style.display = 'block';
-            btn.textContent = "Create Account";
-            btn.disabled = false;
+            authError.textContent = error.message; authError.style.display = 'block';
+            btn.textContent = "Create Account"; btn.disabled = false;
         }
     });
 
-    // --- GOOGLE SIGN IN ---
     document.getElementById('login-form').addEventListener('submit', async (e) => {
         e.preventDefault();
         authError.style.display = 'none';
@@ -588,29 +553,21 @@
         catch (error) { authError.textContent = error.message; authError.style.display = 'block'; }
     }
 
-    // --- COMPLETE PROFILE (Google) ---
     document.getElementById('complete-profile-form').addEventListener('submit', async (e) => {
         e.preventDefault();
         const user = auth.currentUser;
         if(!user) return;
-        
         const phone = document.getElementById('comp-phone').value;
         const age = document.getElementById('comp-age').value;
         const city = document.getElementById('comp-city').value;
-
         const userData = {
             uid: user.uid, name: user.displayName, email: user.email, profilePic: user.photoURL,
             phone: phone, age: age, city: city, 
             termsAccepted: true, plan: 'free', createdAt: new Date().toISOString()
         };
-
         try {
-            // 1. Save to DB
             await db.ref('users/' + user.uid).set(userData);
-
-            // 2. Send Email
             await sendWelcomeEmail(userData);
-
             completeProfileModal.style.display = "none";
             updateProfileUI(userData);
         } catch (error) { document.getElementById('complete-error').textContent = error.message; }
@@ -635,10 +592,56 @@
     document.addEventListener('DOMContentLoaded', () => {
         const input = document.getElementById('user-input');
         const btn = document.getElementById('send-btn');
+        const micBtn = document.getElementById('mic-btn');
         const container = document.getElementById('chat-container');
         const scrollArea = document.getElementById('chat-scroll-area');
 
+        // Auto-resize Input
         input.addEventListener('input', function() { this.style.height = 'auto'; this.style.height = Math.min(this.scrollHeight, 150) + 'px'; });
+
+        // --- VOICE INPUT LOGIC ---
+        let recognition;
+        if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+            recognition = new SpeechRecognition();
+            recognition.continuous = false;
+            recognition.lang = 'en-US';
+            recognition.interimResults = true;
+            let isListening = false;
+
+            micBtn.addEventListener('click', () => {
+                if (isListening) { recognition.stop(); } else {
+                    try {
+                        recognition.start();
+                        micBtn.classList.add('listening');
+                        input.placeholder = "Listening...";
+                        isListening = true;
+                    } catch (err) { micBtn.classList.remove('listening'); }
+                }
+            });
+
+            recognition.onresult = (event) => {
+                const transcript = Array.from(event.results).map(result => result[0]).map(result => result.transcript).join('');
+                input.value = transcript;
+                input.style.height = 'auto';
+                input.style.height = Math.min(input.scrollHeight, 150) + 'px';
+            };
+
+            recognition.onend = () => {
+                micBtn.classList.remove('listening');
+                input.placeholder = "Ask a question...";
+                input.focus();
+                isListening = false;
+            };
+
+            recognition.onerror = () => {
+                micBtn.classList.remove('listening');
+                input.placeholder = "Error. Try again.";
+                isListening = false;
+            };
+        } else {
+            micBtn.style.display = 'none'; // Hide if not supported
+        }
 
         async function sendMessage() {
             const text = input.value.trim();
@@ -705,6 +708,6 @@
     window.toggleSidebar = function() { document.getElementById('sidebar').classList.toggle('active'); document.getElementById('sidebar-overlay').classList.toggle('active'); }
     window.resetChat = function() { localStorage.removeItem('elegetsHistory'); conversationHistory = [{ role: "system", content: "You are Elegets AI." }]; document.getElementById('chat-container').innerHTML = ''; location.reload(); }
     function escapeHtml(text) { return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;"); }
-</script>
+    </script>
 </body>
 </html>
