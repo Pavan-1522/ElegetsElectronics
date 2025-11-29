@@ -42,119 +42,72 @@
             overflow: hidden;
         }
 
+        /* --- INITIAL APP LOADER --- */
+        #app-loader {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: #131314; z-index: 50000;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+        }
+        .loader-logo { width: 60px; margin-bottom: 20px; border-radius: 10px; }
+        .app-spinner {
+            width: 40px; height: 40px; border: 3px solid rgba(255,255,255,0.1);
+            border-top-color: var(--accent); border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+        .loader-status { margin-top: 15px; color: #888; font-size: 0.9rem; animation: pulse 1.5s infinite; }
+
         /* --- SIDEBAR --- */
         .sidebar {
-            width: 280px;
-            background: var(--bg-sidebar);
-            display: flex;
-            flex-direction: column;
-            padding: 20px;
-            position: fixed;
-            height: 100%;
-            z-index: 1000;
-            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            transform: translateX(0);
+            width: 280px; background: var(--bg-sidebar); display: flex; flex-direction: column;
+            padding: 20px; position: fixed; height: 100%; z-index: 1000;
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1); transform: translateX(0);
             border-right: 1px solid rgba(255,255,255,0.1);
         }
-
         .sidebar-header { margin-bottom: 30px; display: flex; align-items: center; gap: 12px; padding: 0 5px; }
         .brand-logo { height: 42px; width: auto; border-radius: 8px; }
         .brand-text {
             font-family: 'Plus Jakarta Sans', sans-serif; font-size: 1.4rem; font-weight: 800; letter-spacing: -0.5px;
             color: #ffffff; background: linear-gradient(120deg, #ffffff, #a8c7fa); -webkit-background-clip: text; -webkit-text-fill-color: transparent;
         }
-        
         .new-chat-btn {
             background: #37393b; color: var(--text-primary); border: none; padding: 12px 16px; border-radius: 12px;
             font-weight: 500; cursor: pointer; display: flex; align-items: center; gap: 10px; transition: background 0.2s;
         }
         .new-chat-btn:hover { background: #444746; }
-
-        .sidebar-overlay {
-            position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); z-index: 999;
-            display: none; backdrop-filter: blur(4px);
-        }
+        .sidebar-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); z-index: 999; display: none; backdrop-filter: blur(4px); }
         .sidebar-overlay.active { display: block; }
 
         /* --- MAIN CONTENT --- */
-        .main-content {
-            flex: 1; display: flex; flex-direction: column; margin-left: 280px; position: relative; width: calc(100% - 280px);
-        }
-
-        /* --- TOP NAVBAR --- */
-        .top-navbar {
-            display: flex; align-items: center; justify-content: space-between;
-            padding: 15px 30px; background: transparent; z-index: 50;
-        }
-
+        .main-content { flex: 1; display: flex; flex-direction: column; margin-left: 280px; position: relative; width: calc(100% - 280px); }
+        .top-navbar { display: flex; align-items: center; justify-content: space-between; padding: 15px 30px; background: transparent; z-index: 50; }
         .mobile-menu-btn { display: none; background: none; border: none; color: #e3e3e3; font-size: 1.2rem; cursor: pointer; }
-
-        /* --- NAV RIGHT SECTION (Badge + Profile) --- */
-        .nav-right-section {
-            margin-left: auto;
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-
-        /* Free Plan Badge */
-        .nav-plan-badge {
-            background: rgba(168, 199, 250, 0.1);
-            color: var(--accent);
-            border: 1px solid rgba(168, 199, 250, 0.2);
-            font-size: 0.75rem;
-            font-weight: 700;
-            padding: 6px 12px;
-            border-radius: 20px;
-            letter-spacing: 0.5px;
-            display: none; 
-        }
-
-        /* Profile Trigger */
+        
+        /* Profile */
+        .nav-right-section { margin-left: auto; display: flex; align-items: center; gap: 15px; }
+        .nav-plan-badge { background: rgba(168, 199, 250, 0.1); color: var(--accent); border: 1px solid rgba(168, 199, 250, 0.2); font-size: 0.75rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; letter-spacing: 0.5px; display: none; }
         .profile-container { position: relative; }
-
-        .profile-trigger {
-            display: flex; align-items: center; gap: 10px; background: transparent;
-            border: 1px solid transparent; padding: 4px 8px; border-radius: 50px;
-            cursor: pointer; transition: all 0.2s;
-        }
+        .profile-trigger { display: flex; align-items: center; gap: 10px; background: transparent; border: 1px solid transparent; padding: 4px 8px; border-radius: 50px; cursor: pointer; transition: all 0.2s; }
         .profile-trigger:hover, .profile-trigger.active { background: rgba(255,255,255,0.05); }
-
         .trigger-avatar { width: 36px; height: 36px; border-radius: 50%; object-fit: cover; border: 2px solid var(--accent); }
         .trigger-name { font-size: 0.9rem; font-weight: 600; color: #fff; max-width: 150px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
         .trigger-icon { font-size: 0.75rem; color: #888; transition: transform 0.2s; margin-right: 5px; }
         .profile-trigger.active .trigger-icon { transform: rotate(180deg); }
-
-        /* Dropdown Menu */
-        .profile-dropdown {
-            position: absolute; top: 125%; right: 0; width: 260px;
-            background: #1e1f20; border: 1px solid var(--border); border-radius: 16px;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.5); display: none;
-            flex-direction: column; overflow: hidden; z-index: 100;
-            animation: fadeIn 0.2s ease-out;
-        }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+        .profile-dropdown { position: absolute; top: 125%; right: 0; width: 260px; background: #1e1f20; border: 1px solid var(--border); border-radius: 16px; box-shadow: 0 10px 40px rgba(0,0,0,0.5); display: none; flex-direction: column; overflow: hidden; z-index: 100; animation: fadeIn 0.2s ease-out; }
         .profile-dropdown.show { display: flex; }
-
         .dropdown-header { padding: 20px; background: rgba(255,255,255,0.02); border-bottom: 1px solid rgba(255,255,255,0.05); }
         .dropdown-user-name { font-size: 1rem; font-weight: 700; color: #fff; margin-bottom: 2px; }
         .dropdown-user-email { font-size: 0.8rem; color: #888; margin-bottom: 0; display: block; overflow: hidden; text-overflow: ellipsis; }
         .dropdown-menu-list { padding: 8px; }
-        .dropdown-item {
-            display: flex; align-items: center; gap: 12px; padding: 12px 16px; color: #ccc;
-            text-decoration: none; font-size: 0.9rem; border-radius: 8px; transition: all 0.2s;
-            cursor: pointer; background: none; border: none; width: 100%; text-align: left;
-        }
+        .dropdown-item { display: flex; align-items: center; gap: 12px; padding: 12px 16px; color: #ccc; text-decoration: none; font-size: 0.9rem; border-radius: 8px; transition: all 0.2s; cursor: pointer; background: none; border: none; width: 100%; text-align: left; }
         .dropdown-item:hover { background: rgba(255,255,255,0.05); color: #fff; }
         .dropdown-item i { width: 16px; text-align: center; color: #888; }
         .dropdown-item:hover i { color: var(--accent); }
         .dropdown-item.logout:hover { background: rgba(255, 107, 107, 0.1); color: #ff6b6b; }
         .dropdown-item.logout:hover i { color: #ff6b6b; }
 
-        /* --- CHAT AREA --- */
+        /* --- CHAT --- */
         .chat-scroll-area { flex: 1; overflow-y: auto; padding: 20px; padding-bottom: 160px; scroll-behavior: smooth; display: flex; flex-direction: column; align-items: center; }
         .chat-width-limiter { width: 100%; max-width: var(--max-width); display: flex; flex-direction: column; gap: 30px; }
-
         .message-wrapper.user { align-self: flex-end; max-width: 80%; display: flex; flex-direction: column; align-items: flex-end; }
         .user-bubble { background: var(--user-bubble); padding: 12px 18px; border-radius: 18px; border-top-right-radius: 4px; color: var(--text-primary); line-height: 1.6; font-size: 0.95rem; }
         .message-wrapper.bot { align-self: flex-start; width: 100%; display: flex; gap: 16px; margin-top: 10px; }
@@ -177,7 +130,7 @@
         .action-icon-btn { background: transparent; border: 1px solid transparent; color: #c4c7c5; padding: 6px 10px; border-radius: 8px; font-size: 0.85rem; cursor: pointer; display: flex; align-items: center; gap: 6px; transition: all 0.2s; }
         .action-icon-btn:hover { background: rgba(255,255,255,0.08); color: var(--accent); }
 
-        /* --- INPUT AREA & VOICE BUTTON --- */
+        /* --- INPUT & VOICE --- */
         .input-container { position: fixed; bottom: 0; left: 280px; right: 0; background: var(--bg-body); padding: 15px 20px; display: flex; flex-direction: column; align-items: center; z-index: 50; }
         .input-wrapper { width: 100%; max-width: var(--max-width); background: var(--bg-input); border-radius: 30px; padding: 10px 20px; display: flex; align-items: flex-end; border: 1px solid transparent; transition: border 0.2s; }
         .input-wrapper:focus-within { border-color: rgba(255,255,255,0.2); background: #282a2c; }
@@ -185,31 +138,32 @@
         .send-btn { width: 40px; height: 40px; background: var(--accent); color: #000; border: none; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; flex-shrink: 0; margin-bottom: 4px; margin-left: 10px; transition: transform 0.2s; }
         .send-btn:hover { transform: scale(1.05); }
         .disclaimer { margin-top: 10px; font-size: 0.75rem; color: #c4c7c5; text-align: center; font-weight: 400; opacity: 0.7; }
+        .mic-btn { width: 40px; height: 40px; background: rgba(255,255,255,0.05); color: #c4c7c5; border: 1px solid rgba(255,255,255,0.1); border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; flex-shrink: 0; margin-bottom: 4px; margin-right: 8px; transition: all 0.3s ease; }
+        .mic-btn:hover { background: rgba(255,255,255,0.15); color: #fff; transform: scale(1.05); }
 
-        /* Voice Button Styles */
-        .mic-btn { 
-            width: 40px; height: 40px; 
-            background: transparent; color: #c4c7c5; 
-            border: 1px solid rgba(255,255,255,0.1); 
-            border-radius: 50%; 
-            display: flex; align-items: center; justify-content: center; 
-            cursor: pointer; flex-shrink: 0; 
-            margin-bottom: 4px; margin-right: 8px; 
-            transition: all 0.2s; 
-        }
-        .mic-btn:hover { background: rgba(255,255,255,0.1); color: #fff; }
-        .mic-btn.listening { 
-            background: rgba(234, 67, 53, 0.15); color: #ea4335; border-color: #ea4335;
-            animation: pulse-mic 1.5s infinite; 
-        }
-        @keyframes pulse-mic {
-            0% { box-shadow: 0 0 0 0 rgba(234, 67, 53, 0.4); }
-            70% { box-shadow: 0 0 0 10px rgba(234, 67, 53, 0); }
-            100% { box-shadow: 0 0 0 0 rgba(234, 67, 53, 0); }
-        }
+        /* Voice Overlay */
+        .voice-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(19, 19, 20, 0.85); backdrop-filter: blur(15px); z-index: 10000; display: none; flex-direction: column; align-items: center; justify-content: center; opacity: 0; transition: opacity 0.3s ease; }
+        .voice-overlay.active { display: flex; opacity: 1; }
+        .voice-visualizer { display: flex; gap: 6px; align-items: center; height: 60px; margin-bottom: 30px; }
+        .wave-bar { width: 8px; background: var(--accent); border-radius: 10px; animation: wave-anim 1s ease-in-out infinite; }
+        .wave-bar:nth-child(1) { height: 20px; animation-delay: 0.1s; }
+        .wave-bar:nth-child(2) { height: 40px; animation-delay: 0.2s; }
+        .wave-bar:nth-child(3) { height: 50px; animation-delay: 0.0s; }
+        .wave-bar:nth-child(4) { height: 40px; animation-delay: 0.3s; }
+        .wave-bar:nth-child(5) { height: 20px; animation-delay: 0.1s; }
+        @keyframes wave-anim { 0%, 100% { height: 10px; opacity: 0.5; } 50% { height: 50px; opacity: 1; box-shadow: 0 0 15px var(--accent); } }
+        .voice-status { font-size: 1.5rem; font-weight: 600; color: #fff; margin-bottom: 15px; }
+        .voice-transcript { font-size: 1.1rem; color: #a8c7fa; max-width: 600px; text-align: center; min-height: 24px; font-weight: 400; padding: 0 20px; line-height: 1.5; }
+        .voice-close-btn { margin-top: 50px; width: 50px; height: 50px; border-radius: 50%; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.1); color: #fff; font-size: 1.2rem; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s; }
+        .voice-close-btn:hover { background: rgba(255, 69, 58, 0.2); color: #ff453a; border-color: #ff453a; transform: scale(1.1); }
 
-        /* Auth Modal Styles */
-        .auth-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); backdrop-filter: blur(10px); z-index: 9999; display: flex; justify-content: center; align-items: center; }
+        /* --- AUTH MODAL (Hidden initially) --- */
+        .auth-overlay { 
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
+            background: rgba(0,0,0,0.85); backdrop-filter: blur(10px); z-index: 9999; 
+            display: none; /* HIDDEN BY DEFAULT */
+            justify-content: center; align-items: center; 
+        }
         .auth-box { background: #1e1f20; width: 100%; max-width: 420px; padding: 30px; border-radius: 20px; border: 1px solid var(--border); box-shadow: 0 20px 50px rgba(0,0,0,0.5); max-height: 90vh; overflow-y: auto; }
         .auth-header { text-align: center; margin-bottom: 20px; }
         .auth-header h2 { color: #fff; margin-bottom: 5px; }
@@ -221,9 +175,14 @@
         .form-group label { display: block; color: #aaa; margin-bottom: 5px; font-size: 0.85rem; }
         .form-group input { width: 100%; background: #131314; border: 1px solid #333; padding: 12px; border-radius: 8px; color: #fff; outline: none; }
         .form-group input:focus { border-color: var(--accent); }
+        
+        /* Password Eye */
+        .password-wrapper { position: relative; }
+        .password-toggle-icon { position: absolute; right: 15px; top: 50%; transform: translateY(-50%); color: #888; cursor: pointer; transition: color 0.2s; z-index: 10; }
+        .password-toggle-icon:hover { color: var(--accent); }
+
         input[type="file"] { padding: 10px; cursor: pointer; font-size: 0.85rem; }
         input[type="file"]::file-selector-button { background: #333; color: #fff; border: none; padding: 5px 10px; border-radius: 4px; margin-right: 10px; cursor: pointer; }
-
         .form-check { display: flex; align-items: flex-start; gap: 10px; margin-bottom: 15px; }
         .form-check input { margin-top: 4px; }
         .form-check label { font-size: 0.8rem; color: #888; line-height: 1.4; }
@@ -232,11 +191,17 @@
         .google-btn { width: 100%; background: #fff; color: #333; margin-top: 15px; padding: 12px; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; }
         .error-msg { color: #ff6b6b; font-size: 0.85rem; margin-bottom: 15px; text-align: center; display: none; }
         .success-msg { color: #4caf50; font-size: 0.85rem; margin-bottom: 15px; text-align: center; display: none; }
-
         .forgot-link { display: block; text-align: right; color: var(--accent); font-size: 0.8rem; margin-top: -10px; margin-bottom: 15px; text-decoration: none; cursor: pointer; }
         .forgot-link:hover { text-decoration: underline; }
         .back-link { text-align: center; color: #888; font-size: 0.85rem; margin-top: 15px; cursor: pointer; }
         .back-link:hover { color: #fff; }
+
+        /* Processing Overlay */
+        .loading-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.92); backdrop-filter: blur(12px); z-index: 20000; display: none; flex-direction: column; align-items: center; justify-content: center; }
+        .loading-spinner { width: 50px; height: 50px; border: 4px solid rgba(168, 199, 250, 0.2); border-top: 4px solid var(--accent); border-radius: 50%; animation: spin 1s linear infinite; margin-bottom: 20px; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        .loading-text { font-size: 1.1rem; color: #fff; font-weight: 600; letter-spacing: 0.5px; }
+        .loading-subtext { margin-top: 8px; font-size: 0.85rem; color: #888; }
 
         @media (max-width: 768px) {
             .sidebar { transform: translateX(-100%); }
@@ -250,6 +215,27 @@
     </style>
 </head>
 <body>
+
+    <div id="app-loader">
+        <img src="elegets-logo-cut.png" alt="Elegets" class="loader-logo">
+        <div class="app-spinner"></div>
+        <div class="loader-status">Initializing Workspace...</div>
+    </div>
+
+    <div class="loading-overlay" id="process-overlay">
+        <div class="loading-spinner"></div>
+        <div class="loading-text" id="loading-main-text">Processing...</div>
+        <div class="loading-subtext" id="loading-sub-text">Please wait while we set up your workspace</div>
+    </div>
+
+    <div class="voice-overlay" id="voice-overlay">
+        <div class="voice-visualizer">
+            <div class="wave-bar"></div><div class="wave-bar"></div><div class="wave-bar"></div><div class="wave-bar"></div><div class="wave-bar"></div>
+        </div>
+        <div class="voice-status" id="voice-status">Listening...</div>
+        <div class="voice-transcript" id="voice-transcript">Speak now</div>
+        <button class="voice-close-btn" onclick="stopVoiceSearch()"><i class="fas fa-times"></i></button>
+    </div>
 
     <div class="auth-overlay" id="auth-modal">
         <div class="auth-box">
@@ -269,7 +255,13 @@
                 </div>
                 <form id="login-form">
                     <div class="form-group"><label>Email Address</label><input type="email" id="login-email" placeholder="name@example.com" required></div>
-                    <div class="form-group"><label>Password</label><input type="password" id="login-password" placeholder="••••••••" required></div>
+                    <div class="form-group">
+                        <label>Password</label>
+                        <div class="password-wrapper">
+                            <input type="password" id="login-password" placeholder="••••••••" required>
+                            <i class="fas fa-eye password-toggle-icon" onclick="togglePassword('login-password', this)"></i>
+                        </div>
+                    </div>
                     <div class="forgot-link" onclick="showResetView()">Forgot Password?</div>
                     <button type="submit" class="btn-primary">Sign In</button>
                 </form>
@@ -290,7 +282,13 @@
                     </div>
                     <div class="form-group"><label>City</label><input type="text" id="reg-city" required></div>
                     <div class="form-group"><label>Email Address</label><input type="email" id="reg-email" required></div>
-                    <div class="form-group"><label>Password</label><input type="password" id="reg-password" required></div>
+                    <div class="form-group">
+                        <label>Password</label>
+                        <div class="password-wrapper">
+                            <input type="password" id="reg-password" required>
+                            <i class="fas fa-eye password-toggle-icon" onclick="togglePassword('reg-password', this)"></i>
+                        </div>
+                    </div>
                     <div class="form-check"><input type="checkbox" id="reg-terms" required><label for="reg-terms">I agree to the Terms of Service and Privacy Policy.</label></div>
                     <button type="submit" class="btn-primary" id="reg-submit-btn">Create Account</button>
                 </form>
@@ -362,7 +360,6 @@
         <div class="input-container">
             <div class="input-wrapper">
                 <button class="mic-btn" id="mic-btn" title="Voice Input"><i class="fas fa-microphone"></i></button>
-                
                 <textarea id="user-input" rows="1" placeholder="Ask a question..."></textarea>
                 <button class="send-btn" id="send-btn"><i class="fas fa-arrow-up"></i></button>
             </div>
@@ -371,9 +368,6 @@
     </div>
 
     <script>
-    // ==========================================
-    // CONFIGURATIONS
-    // ==========================================
     const EMAILJS_SERVICE_ID = "service_2yenhc6"; 
     const EMAILJS_TEMPLATE_ID = "template_tfooqbd"; 
     const EMAILJS_PUBLIC_KEY = "NZdFltvMkjvaQcLMT"; 
@@ -400,15 +394,60 @@
     (function(){ emailjs.init(EMAILJS_PUBLIC_KEY); })();
 
     const authModal = document.getElementById('auth-modal');
+    const appLoader = document.getElementById('app-loader');
     const completeProfileModal = document.getElementById('complete-profile-modal');
     const userProfileUI = document.getElementById('user-profile-ui');
     const navBadge = document.getElementById('nav-badge');
     const authError = document.getElementById('auth-error');
     const authSuccess = document.getElementById('auth-success');
+    const processOverlay = document.getElementById('process-overlay');
+    const loadingMainText = document.getElementById('loading-main-text');
 
-    // --- AUTH STATE LISTENER ---
+    function toggleLoading(show, text = "Processing...") {
+        loadingMainText.textContent = text;
+        processOverlay.style.display = show ? 'flex' : 'none';
+    }
+
+    window.togglePassword = function(inputId, icon) {
+        const input = document.getElementById(inputId);
+        if (input.type === "password") {
+            input.type = "text";
+            icon.classList.remove('fa-eye');
+            icon.classList.add('fa-eye-slash');
+        } else {
+            input.type = "password";
+            icon.classList.remove('fa-eye-slash');
+            icon.classList.add('fa-eye');
+        }
+    };
+
+    // --- HYBRID LOGIN STRATEGY (Popup First, Fallback to Redirect) ---
+    async function signInWithGoogle() {
+        try {
+            // Try Popup First (Cleanest UX)
+            await auth.signInWithPopup(provider);
+        } catch (error) {
+            console.warn("Popup failed (COOP blocked). Falling back to Redirect...", error);
+            try {
+                // Fallback to Redirect if Popup is blocked
+                await auth.signInWithRedirect(provider);
+            } catch (redirectError) {
+                authError.textContent = "Login failed. Please disable ad-blockers or try a different browser.";
+                authError.style.display = 'block';
+                console.error(redirectError);
+            }
+        }
+    }
+
+    // --- MAIN AUTH LISTENER ---
+    // Wait for Redirect Result first, then check Auth State
+    auth.getRedirectResult().then((result) => {
+        if (result.user) { console.log("Redirect Login Success"); }
+    }).catch(err => console.log(err));
+
     auth.onAuthStateChanged(async (user) => {
         if (user) {
+            appLoader.style.display = 'none';
             const userRef = db.ref('users/' + user.uid);
             userRef.once('value').then((snapshot) => {
                 const userData = snapshot.val();
@@ -423,9 +462,13 @@
             });
             renderHistoryFromStorage();
         } else {
-            authModal.style.display = "flex";
-            userProfileUI.style.display = "none";
-            document.getElementById('chat-container').innerHTML = '';
+            // Delay hiding loader slightly to prevent flicker if redirect is processing
+            setTimeout(() => {
+                appLoader.style.display = 'none';
+                authModal.style.display = "flex"; 
+                userProfileUI.style.display = "none";
+                document.getElementById('chat-container').innerHTML = '';
+            }, 500);
         }
     });
 
@@ -439,15 +482,13 @@
         userProfileUI.style.display = "flex";
     }
 
-    async function sendWelcomeEmail(userData) {
-        try {
-            const templateParams = {
-                to_email: userData.email,
-                name: userData.name, email: userData.email, phone: userData.phone,
-                age: userData.age, city: userData.city, profilePic: userData.profilePic
-            };
-            await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, templateParams);
-        } catch (error) { console.error("Email failed:", error); }
+    function sendWelcomeEmail(userData) {
+        const templateParams = {
+            to_email: userData.email,
+            name: userData.name, email: userData.email, phone: userData.phone,
+            age: userData.age, city: userData.city, profilePic: userData.profilePic
+        };
+        emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, templateParams).catch(err => console.error(err));
     }
 
     window.toggleProfileMenu = function() {
@@ -488,7 +529,7 @@
         if(!email) { authError.textContent = "Please enter your email."; authError.style.display = 'block'; return; }
         try {
             await auth.sendPasswordResetEmail(email);
-            authSuccess.textContent = "Reset link sent! Check your inbox.";
+            authSuccess.textContent = "Reset link sent! Check your inbox and spam folder.";
             authSuccess.style.display = 'block'; authError.style.display = 'none';
         } catch (error) { authError.textContent = error.message; authError.style.display = 'block'; }
     }
@@ -508,7 +549,6 @@
     document.getElementById('register-form').addEventListener('submit', async (e) => {
         e.preventDefault();
         authError.style.display = 'none';
-        const btn = document.getElementById('reg-submit-btn');
         const email = document.getElementById('reg-email').value;
         const password = document.getElementById('reg-password').value;
         const name = document.getElementById('reg-name').value;
@@ -519,44 +559,52 @@
         const file = fileInput.files[0];
 
         if (!file) { authError.textContent = "Please select a profile picture."; authError.style.display = 'block'; return; }
+        if (file.size > 5 * 1024 * 1024) { authError.textContent = "Image too large. Please use an image under 5MB."; authError.style.display = 'block'; return; }
 
         try {
-            btn.textContent = "Uploading Image...";
-            btn.disabled = true;
+            toggleLoading(true, "Optimizing profile picture...");
             const picUrl = await uploadToCloudinary(file);
             if(!picUrl) throw new Error("Image upload failed");
-            btn.textContent = "Creating Account...";
+
+            toggleLoading(true, "Securing account...");
             const userCredential = await auth.createUserWithEmailAndPassword(email, password);
             const user = userCredential.user;
+
+            toggleLoading(true, "Finalizing workspace...");
             const userData = {
                 uid: user.uid, name: name, email: email, phone: phone, 
                 age: age, city: city, profilePic: picUrl, 
                 termsAccepted: true, plan: 'free', createdAt: new Date().toISOString()
             };
             await db.ref('users/' + user.uid).set(userData);
-            await sendWelcomeEmail(userData);
+            sendWelcomeEmail(userData);
+            toggleLoading(false);
         } catch (error) {
+            toggleLoading(false);
             authError.textContent = error.message; authError.style.display = 'block';
-            btn.textContent = "Create Account"; btn.disabled = false;
         }
     });
 
     document.getElementById('login-form').addEventListener('submit', async (e) => {
         e.preventDefault();
         authError.style.display = 'none';
-        try { await auth.signInWithEmailAndPassword(document.getElementById('login-email').value, document.getElementById('login-password').value); } 
-        catch (error) { authError.textContent = "Invalid email or password."; authError.style.display = 'block'; }
+        toggleLoading(true, "Signing in...");
+        try { 
+            await auth.signInWithEmailAndPassword(document.getElementById('login-email').value, document.getElementById('login-password').value); 
+            toggleLoading(false);
+        } 
+        catch (error) { 
+            toggleLoading(false);
+            authError.textContent = "Invalid email or password."; 
+            authError.style.display = 'block'; 
+        }
     });
-
-    async function signInWithGoogle() {
-        try { await auth.signInWithPopup(provider); } 
-        catch (error) { authError.textContent = error.message; authError.style.display = 'block'; }
-    }
 
     document.getElementById('complete-profile-form').addEventListener('submit', async (e) => {
         e.preventDefault();
         const user = auth.currentUser;
         if(!user) return;
+        toggleLoading(true, "Updating profile...");
         const phone = document.getElementById('comp-phone').value;
         const age = document.getElementById('comp-age').value;
         const city = document.getElementById('comp-city').value;
@@ -567,15 +615,18 @@
         };
         try {
             await db.ref('users/' + user.uid).set(userData);
-            await sendWelcomeEmail(userData);
+            sendWelcomeEmail(userData);
+            toggleLoading(false);
             completeProfileModal.style.display = "none";
             updateProfileUI(userData);
-        } catch (error) { document.getElementById('complete-error').textContent = error.message; }
+        } catch (error) { 
+            toggleLoading(false);
+            document.getElementById('complete-error').textContent = error.message; 
+        }
     });
 
-    function logout() { auth.signOut(); }
+    function logout() { auth.signOut().then(() => location.reload()); }
 
-    // --- CHAT LOGIC ---
     const messageStore = {}; 
     const renderer = new marked.Renderer();
     renderer.code = function({ text, lang }) {
@@ -595,12 +646,32 @@
         const micBtn = document.getElementById('mic-btn');
         const container = document.getElementById('chat-container');
         const scrollArea = document.getElementById('chat-scroll-area');
+        const voiceOverlay = document.getElementById('voice-overlay');
+        const voiceStatus = document.getElementById('voice-status');
+        const voiceTranscript = document.getElementById('voice-transcript');
 
-        // Auto-resize Input
         input.addEventListener('input', function() { this.style.height = 'auto'; this.style.height = Math.min(this.scrollHeight, 150) + 'px'; });
 
-        // --- VOICE INPUT LOGIC ---
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        function playTone(freq, type, duration) {
+            if(audioCtx.state === 'suspended') audioCtx.resume();
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.type = type;
+            osc.frequency.value = freq;
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            osc.start();
+            gain.gain.exponentialRampToValueAtTime(0.00001, audioCtx.currentTime + duration);
+            osc.stop(audioCtx.currentTime + duration);
+        }
+
+        function playStartSound() { playTone(600, 'sine', 0.1); setTimeout(() => playTone(800, 'sine', 0.2), 100); }
+        function playStopSound() { playTone(800, 'sine', 0.1); setTimeout(() => playTone(600, 'sine', 0.2), 100); }
+
         let recognition;
+        window.stopVoiceSearch = function() { if(recognition) recognition.stop(); voiceOverlay.classList.remove('active'); };
+
         if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
             const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
             recognition = new SpeechRecognition();
@@ -610,65 +681,112 @@
             let isListening = false;
 
             micBtn.addEventListener('click', () => {
-                if (isListening) { recognition.stop(); } else {
-                    try {
-                        recognition.start();
-                        micBtn.classList.add('listening');
-                        input.placeholder = "Listening...";
-                        isListening = true;
-                    } catch (err) { micBtn.classList.remove('listening'); }
-                }
+                try {
+                    playStartSound();
+                    recognition.start();
+                    voiceOverlay.classList.add('active');
+                    voiceStatus.textContent = "Listening...";
+                    voiceTranscript.textContent = "";
+                    isListening = true;
+                } catch (err) { console.log(err); }
             });
 
             recognition.onresult = (event) => {
                 const transcript = Array.from(event.results).map(result => result[0]).map(result => result.transcript).join('');
+                voiceTranscript.textContent = transcript;
                 input.value = transcript;
                 input.style.height = 'auto';
                 input.style.height = Math.min(input.scrollHeight, 150) + 'px';
             };
 
             recognition.onend = () => {
-                micBtn.classList.remove('listening');
-                input.placeholder = "Ask a question...";
-                input.focus();
+                playStopSound();
+                voiceStatus.textContent = "Processing...";
                 isListening = false;
+                setTimeout(() => { voiceOverlay.classList.remove('active'); input.focus(); }, 800);
             };
 
-            recognition.onerror = () => {
-                micBtn.classList.remove('listening');
-                input.placeholder = "Error. Try again.";
-                isListening = false;
+            recognition.onerror = (event) => {
+                voiceStatus.textContent = "Error. Try again.";
+                setTimeout(() => voiceOverlay.classList.remove('active'), 1500);
             };
-        } else {
-            micBtn.style.display = 'none'; // Hide if not supported
-        }
+        } else { micBtn.style.display = 'none'; }
 
-        async function sendMessage() {
-            const text = input.value.trim();
-            if (!text) return;
-            renderMessage('user', text);
-            conversationHistory.push({ role: "user", content: text });
-            localStorage.setItem('elegetsHistory', JSON.stringify(conversationHistory));
-            input.value = ''; input.style.height = 'auto'; scrollToBottom();
-            const loadingId = showLoading();
+    async function sendMessage() {
+        const text = input.value.trim();
+        if (!text) return;
 
-            try {
-                const response = await fetch(BACKEND_URL, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ message: text, history: conversationHistory })
-                });
-                if (!response.ok) throw new Error("Backend Error");
-                const data = await response.json();
-                document.getElementById(loadingId).remove();
-                renderMessage('bot', data.reply);
-                conversationHistory.push({ role: "assistant", content: data.reply });
-                localStorage.setItem('elegetsHistory', JSON.stringify(conversationHistory));
-            } catch (error) {
-                if(document.getElementById(loadingId)) document.getElementById(loadingId).remove();
-                renderMessage('bot', "**Connection Error:** Could not reach server.");
+        renderMessage('user', text);
+        conversationHistory.push({ role: "user", content: text });
+        localStorage.setItem('elegetsHistory', JSON.stringify(conversationHistory));
+
+        input.value = '';
+        input.style.height = 'auto';
+        scrollToBottom();
+
+        // Show Loading bubble before streaming starts
+        const loadingId = showLoading();
+        
+        try {
+            const response = await fetch(BACKEND_URL, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ message: text, history: conversationHistory })
+            });
+
+            if (!response.ok || !response.body) throw new Error("Backend streaming error");
+
+            // Remove loading bubble
+            document.getElementById(loadingId)?.remove();
+
+            // Create bot message container
+            let finalReply = '';
+            const botId = 'bot-' + Date.now() + Math.random();
+            const div = document.createElement('div');
+            div.className = 'message-wrapper bot';
+            div.innerHTML = `<div class="bot-avatar"><i class="fas fa-robot"></i></div><div id="${botId}" class="bot-content"></div>`;
+            container.appendChild(div);
+            scrollToBottom();
+
+            const reader = response.body.getReader();
+            const decoder = new TextDecoder("utf-8");
+            let done, value;
+
+            while (true) {
+                ({ value, done } = await reader.read());
+                if (done) break;
+
+                const chunk = decoder.decode(value);
+                finalReply += chunk;
+                document.getElementById(botId).innerHTML = marked.parse(finalReply);
+                scrollToBottom();
             }
+
+            // Finalize reply
+            conversationHistory.push({ role: "assistant", content: finalReply });
+            localStorage.setItem('elegetsHistory', JSON.stringify(conversationHistory));
+
+            // Apply code highlighting
+            div.querySelectorAll('pre code').forEach(el => hljs.highlightElement(el));
+
+            // Add copy/share buttons after finish
+            const msgId = botId;
+            messageStore[msgId] = finalReply;
+            document.getElementById(botId).innerHTML += `
+                <div class="bot-actions">
+                    <button class="action-icon-btn" onclick="copyFromStore('${msgId}')"><i class="fas fa-copy"></i> Copy</button>
+                    <button class="action-icon-btn" onclick="shareFromStore('${msgId}')"><i class="fas fa-share-alt"></i> Share</button>
+                </div>`;
+            
+            scrollToBottom();
+
+        } catch (error) {
+            console.error(error);
+            document.getElementById(loadingId)?.remove();
+            renderMessage('bot', "**⚠ Server Error:** Unable to fetch streaming response.");
         }
+    }
+
 
         window.renderMessage = function(role, text) {
             const div = document.createElement('div');
